@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Login - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a th:href="@{/}" class="nav-brand">
+            <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px">
+        </a>
+        <div class="nav-links">
+            <ul>
+                <li><a th:href="@{/}" class="nav-link">Home</a></li>
+                <li><a th:href="@{/auth/signup}" class="btn btn-primary">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Login Form -->
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
+    <div class="container">
+        <div style="width: 550px; margin: 0 auto;">
+            <div class="card animate-fade-in-up">
+                <div class="text-center mb-4">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to your InsightEd account</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required style="padding-right: 45px;">
+                            <button type="button" id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">
+                                <img id="passwordIcon" th:src="@{/images/eye.png}" style="height: 15px; width: 15px">
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; align-items: center;">
+                            <input type="checkbox" id="rememberMe" name="rememberMe" style="margin-right: 8px;">
+                            Remember Me
+                        </label>
+                    </div>
+
+                    <div class="form-group" style="text-align: right; margin-bottom: 1rem;">
+                        <a href="#" style="color: var(--primary-blue); text-decoration: none; font-size: 0.95rem; font-weight: 500;">Forgot Password?</a>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary w-full">Login</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p style="color: var(--gray-600); font-size: 0.875rem;">
+                            Don't have an account?
+                            <a href="signup.html" style="color: var(--primary-blue); text-decoration: none; font-weight: 500;">Sign up here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/scripts/script.js}"></script>
+<script>
+    async function handleLogin(event){
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const loginDtoData =  {
+                email: data.email.trim(),
+                password: data.password
+            };
+
+            //api call
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(loginDtoData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok){
+                showNotification(result.message, "success");
+
+                // Redirect based on backend role response
+                const redirectUrl = result.redirect || '/';
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1000);
+            }else{
+                const errormessage = result.message;
+                showNotification(errormessage, "error");
+            }
+
+        }catch (error){
+
+            // Network or other errors
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                showNotification('Network error. Please check your connection and try again.', "error");
+            } else {
+                console.log(error.message);
+                showNotification('An unexpected error occurred. Please try again.', "error");
+            }
+        }
+
+    }
+
+    const eyeIcon = '[[@{/images/eye.png}]]';
+    const hideIcon = '[[@{/images/hide.png}]]';
+    // Password toggle functionality
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('PasswordIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.src = hideIcon;
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.src = eyeIcon;
+        }
+    });
+</script>
+</body>
+</html>

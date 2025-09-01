@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Student Dashboard - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="text-center mb-4">
+        <a href="index.html" class="nav-brand">📚 InsightEd</a>
+        <p style="color: var(--gray-600); font-size: 0.875rem; margin-top: 0.5rem;">Student Portal</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        <li><a href="student-dashboard.html" class="active" data-section="dashboard">📊 Dashboard</a></li>
+        <li><a href="student-upload.html" data-section="upload">📤 Upload Assignment</a></li>
+        <li><a href="student-feedback.html" data-section="feedback">💬 Feedback</a></li>
+        <li><a href="student-grades.html" data-section="grades">📈 Grades</a></li>
+        <li><a href="student-notifications.html" data-section="notifications">🔔 Notifications</a></li>
+        <li style="margin-top: 2rem;"><a href="login.html">🚪 Logout</a></li>
+    </ul>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="dashboard-section">
+        <div class="flex justify-between items-center mb-4">
+            <h1>Student Dashboard</h1>
+            <div class="flex items-center gap-2">
+                <span class="badge badge-submitted">Welcome, John Lewis</span>
+                <button class="btn btn-ghost" id="notificationBtn">🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">3</span></button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="features-grid mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📝 Assignments</h3>
+                    <p class="card-description">Total submitted</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">12</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">⏳ Pending</h3>
+                    <p class="card-description">Awaiting feedback</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">3</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Average Grade</h3>
+                    <p class="card-description">Current semester</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--success);">87%</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">💬 Feedback</h3>
+                    <p class="card-description">Total comments</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">45</div>
+            </div>
+        </div>
+
+        <!-- Recent Assignments -->
+        <div class="table-container">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+                <h3>Recent Assignments</h3>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Assignment</th>
+                    <th>Course</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Essay on Machine Learning</td>
+                    <td>CS 101</td>
+                    <td>2024-01-15</td>
+                    <td><span class="badge badge-reviewed">Reviewed</span></td>
+                    <td>92%</td>
+                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
+                </tr>
+                <tr>
+                    <td>Data Structures Project</td>
+                    <td>CS 201</td>
+                    <td>2024-01-20</td>
+                    <td><span class="badge badge-pending">Pending</span></td>
+                    <td>-</td>
+                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
+                </tr>
+                <tr>
+                    <td>Algorithm Analysis</td>
+                    <td>CS 301</td>
+                    <td>2024-01-22</td>
+                    <td><span class="badge badge-reviewed">Reviewed</span></td>
+                    <td>85%</td>
+                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Notification Dropdown -->
+<div id="notificationDropdown" class="hidden" style="position: fixed; top: 70px; right: 20px; width: 300px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-xl); z-index: 100; padding: 1rem;">
+    <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Notifications</h3>
+    <div class="comment-item">
+        <div class="comment-author">New Feedback</div>
+        <div class="comment-text">Your essay on Machine Learning has been reviewed.</div>
+        <div class="comment-time">2 hours ago</div>
+    </div>
+    <div class="comment-item">
+        <div class="comment-author">Grade Posted</div>
+        <div class="comment-text">Grade for Algorithm Analysis: 85%</div>
+        <div class="comment-time">1 day ago</div>
+    </div>
+    <div class="comment-item">
+        <div class="comment-author">Assignment Due</div>
+        <div class="comment-text">Database Design project due in 3 days.</div>
+        <div class="comment-time">2 days ago</div>
+    </div>
+</div>
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>

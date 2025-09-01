@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+  <title>Sign Up - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a th:href="@{/}" class="nav-brand">
+      <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px">
+    </a>
+    <div class="nav-links">
+      <ul>
+        <li><a th:href="@{/}" class="nav-link">Home</a></li>
+        <li><a th:href="@{/auth/login}" class="btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Signup Form -->
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
+  <div class="container">
+    <div style="max-width: 600px; margin: 0 auto;">
+      <div class="card animate-fade-in-up">
+        <div class="text-center mb-4">
+          <h1>Join Our Platform</h1>
+          <p>Join InsightEd and transform your learning experience</p>
+        </div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Enter first name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Enter last name" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupEmail" class="form-label">Email Address</label>
+            <input type="email" id="signupEmail" name="email" class="form-input" placeholder="Enter your email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signupPassword" class="form-label">Password</label>
+            <div style="position: relative;">
+              <input type="password" id="signupPassword" name="password" class="form-input" placeholder="Create a password" required minlength="6" style="padding-right: 45px;">
+              <button type="button" id="toggleSignupPassword"
+                      style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">
+                <img id="signupPasswordIcon" th:src="@{/images/eye.png}" style="height: 15px; width: 15px">
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <div style="position: relative;">
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Confirm your password" required style="padding-right: 45px;">
+              <button type="button" id="toggleConfirmPassword"
+                      style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">
+                <img id="confirmPasswordIcon" th:src="@{/images/eye.png}" style="height: 15px; width: 15px">
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary w-full">Create Account</button>
+          </div>
+
+          <div class="text-center mt-3">
+            <p style="color: var(--gray-600); font-size: 0.875rem;">
+              Already have an account?
+              <a href="login.html" style="color: var(--primary-blue); text-decoration: none; font-weight: 500;">Sign in here</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/scripts/script.js}"></script>
+<script>
+  async function handleSignup(event) {
+    event.preventDefault(); // Prevent form refresh
+
+    // Collect form data
+    const formData = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      email: document.getElementById('signupEmail').value.trim(),
+      password: document.getElementById('signupPassword').value,
+      confirmPassword: document.getElementById('confirmPassword').value
+    };
+
+    // Optional: basic validation before sending
+    if (formData.password !== formData.confirmPassword) {
+      showNotification("Passwords do not match", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result.message)
+        showNotification("Account created successfully!", "success");
+        setTimeout(() => {
+          window.location.href = '/auth/login';
+        }, 2500);
+      } else {
+        const error = await response.json();
+        console.log(error.message)
+        showNotification(error.message || "Signup failed. Please try again.", "error");
+      }
+    } catch (err) {
+      showNotification("Something went wrong. Please try again later.", "error");
+    }
+  }
+
+  const eyeIcon = '[[@{/images/eye.png}]]';
+  const hideIcon = '[[@{/images/hide.png}]]';
+
+  // Toggle for signup password
+  document.getElementById('toggleSignupPassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('signupPassword');
+    const icon = document.getElementById('signupPasswordIcon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.src = hideIcon;
+    } else {
+      passwordInput.type = 'password';
+      icon.src = eyeIcon;
+    }
+  });
+
+  // Toggle for confirm password
+  document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('confirmPassword');
+    const icon = document.getElementById('confirmPasswordIcon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.src = hideIcon;
+    } else {
+      passwordInput.type = 'password';
+      icon.src = eyeIcon;
+    }
+  });
+</script>
+</body>
+
+</html>

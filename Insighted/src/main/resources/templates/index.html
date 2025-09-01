@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+  <title>Smart Note & Assignment Feedback Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a th:href="@{/}" class="nav-brand">
+      <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px">
+    </a>
+    <div class="nav-links">
+      <ul>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a th:href="@{/auth/login}" class="nav-link">Login</a></li>
+        <li><a th:href="@{/auth/signup}" class="btn btn-primary">Get Started</a></li>
+      </ul>
+      <button class="btn btn-ghost" id="mobileMenuBtn" style="display: none;">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero"
+         th:style="'background-image: url(' + @{/images/banner.jpg} + '); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;'">
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.4);"></div>
+  <div class="container" style="position: relative; z-index: 2;">
+    <div class="hero-content" style="color: white; text-align: center;">
+      <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+        Transform Your Academic Feedback Experience
+      </h1>
+      <p style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        Streamline assignment submissions, provide detailed inline feedback, and track student progress with our intelligent platform designed for modern education.
+      </p>
+      <a th:href="@{/signup}" class="btn btn-secondary">Get Started Free</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- Features Section -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="text-center">
+      <h2>Powerful Features for Modern Education</h2>
+      <p>Everything you need to enhance the learning experience for both students and teachers.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card animate-fade-in-up">
+        <div class="feature-icon">📄</div>
+        <h3>Document Upload</h3>
+        <p>Seamlessly upload assignments in various formats. Support for PDFs, Word documents, images, and more with drag-and-drop functionality.</p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up">
+        <div class="feature-icon">💬</div>
+        <h3>Inline Commenting</h3>
+        <p>Provide precise feedback with inline comments. Click anywhere on the document to add contextual feedback that students can easily understand.</p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up">
+        <div class="feature-icon">📊</div>
+        <h3>Grade Tracking</h3>
+        <p>Comprehensive grade management system. Track progress over time with detailed analytics and performance insights for better learning outcomes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="features" id="about" style="background-color: var(--gray-50);">
+  <div class="container">
+    <div class="text-center">
+      <h2>Why Choose InsightEd?</h2>
+      <p>Built by educators, for educators. Our platform addresses the real challenges in academic feedback and assessment.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">For Students</h3>
+          <p class="card-description">Receive clear, actionable feedback that helps you improve and learn more effectively.</p>
+        </div>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Easy assignment submission</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Clear feedback visualization</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Progress tracking</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Notification system</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">For Teachers</h3>
+          <p class="card-description">Streamline your grading process and provide more meaningful feedback in less time.</p>
+        </div>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Efficient grading workflow</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Inline commenting tools</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Student progress analytics</li>
+          <li style="padding: 0.5rem 0; color: var(--gray-600);">✓ Bulk operations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>InsightEd</h3>
+        <p>Transforming education through intelligent feedback and seamless collaboration between students and teachers.</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>📧 support@insighted.com</p>
+        <p>📞 +1 (555) 123-4567</p>
+        <p>🏢 Khumaltar, Lalitpur</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Support</h3>
+        <a href="#">Help Center</a>
+        <a href="#">Documentation</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 InsightEd Platform. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script th:src="@{/scripts/scrpit.js}"></script>
+</body>
+
+</html>
