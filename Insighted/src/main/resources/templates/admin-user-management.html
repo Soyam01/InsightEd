@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>User Management - Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="admin-sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <section class="dashboard-section">
+        <div class="flex justify-between items-center mb-4">
+            <h1>User Management</h1>
+            <button class="btn btn-primary" id="addUserBtn">+ Add New User</button>
+        </div>
+
+        <!-- Add User Form (Initially Hidden) -->
+        <div id="addUserForm" class="card mb-4" style="display: none;">
+            <div class="card-header">
+                <h3 class="card-title">➕ Create New User</h3>
+                <p class="card-description">Add a new teacher or admin to the platform</p>
+            </div>
+            <form id="createUserForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Enter last name" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address *</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole" class="form-label">Role *</label>
+                        <select id="userRole" name="role" class="form-select" required>
+                            <option value="">Select role</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label for="institution" class="form-label">Institution</label>
+                        <select id="institution" name="institution" class="form-select">
+                            <option value="">Select institution</option>
+                            <option value="harvard">Harvard University</option>
+                            <option value="mit">MIT</option>
+                            <option value="stanford">Stanford University</option>
+                            <option value="ucla">UCLA</option>
+                            <option value="caltech">CalTech</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="department" class="form-label">Department/Subject</label>
+                        <input type="text" id="department" name="department" class="form-input" placeholder="e.g., Computer Science, Mathematics">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label for="tempPassword" class="form-label">Temporary Password *</label>
+                        <div style="position: relative;">
+                            <input type="password" id="tempPassword" name="password" class="form-input" placeholder="Generate temporary password" required style="padding-right: 45px;">
+                            <button type="button" id="generatePassword" style="position: absolute; right: 45px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--primary-blue); font-size: 14px;">Generate</button>
+                            <button type="button" id="toggleTempPassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="form-label">Account Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="active">Active</option>
+                            <option value="pending">Pending Activation</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Admin Specific Options -->
+                <div id="adminOptions" style="display: none; margin-bottom: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Admin Permissions</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="user_management" style="margin-right: 8px;">
+                                User Management
+                            </label>
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="institution_management" style="margin-right: 8px;">
+                                Institution Management
+                            </label>
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="analytics_access" style="margin-right: 8px;">
+                                Analytics Access
+                            </label>
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="system_settings" style="margin-right: 8px;">
+                                System Settings
+                            </label>
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="content_management" style="margin-right: 8px;">
+                                Content Management
+                            </label>
+                            <label style="display: flex; align-items: center; font-size: 0.875rem;">
+                                <input type="checkbox" name="permissions" value="support_access" style="margin-right: 8px;">
+                                Support Access
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" id="sendWelcomeEmail" name="sendWelcomeEmail" style="margin-right: 8px;" checked>
+                        Send welcome email with login credentials
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-ghost" id="cancelUserForm">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- User Stats -->
+        <div class="features-grid mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">👨‍🎓 Students</h3>
+                    <p class="card-description">Active students</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">45,234</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">👨‍🏫 Teachers</h3>
+                    <p class="card-description">Active educators</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">8,456</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🔒 Admins</h3>
+                    <p class="card-description">System administrators</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">157</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🕐 Pending</h3>
+                    <p class="card-description">Awaiting approval</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">23</div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="card mb-4">
+            <div style="display: grid; grid-template-columns: 1fr auto auto auto; gap: 1rem; align-items: end;">
+                <div class="form-group" style="margin: 0;">
+                    <label class="form-label">Search Users</label>
+                    <input type="text" class="form-input" placeholder="Search by name, email, or ID...">
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label class="form-label">Role</label>
+                    <select class="form-select">
+                        <option>All Roles</option>
+                        <option>Students</option>
+                        <option>Teachers</option>
+                        <option>Admins</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label class="form-label">Status</label>
+                    <select class="form-select">
+                        <option>All Status</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                        <option>Pending</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">👥 All Users</h3>
+                <p class="card-description">Manage platform users and their permissions</p>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                    <tr style="border-bottom: 2px solid var(--border-color);">
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">User</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Role</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Institution</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Status</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Last Active</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 1rem;">
+                            <div>
+                                <div style="font-weight: 500;">John Smith</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">john.smith@email.com</div>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem;"><span class="badge badge-submitted">Student</span></td>
+                        <td style="padding: 1rem;">Harvard University</td>
+                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
+                        <td style="padding: 1rem;">2 hours ago</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 1rem;">
+                            <div>
+                                <div style="font-weight: 500;">Dr. Sarah Johnson</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">s.johnson@university.edu</div>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem;"><span class="badge badge-pending">Teacher</span></td>
+                        <td style="padding: 1rem;">MIT</td>
+                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
+                        <td style="padding: 1rem;">1 day ago</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 1rem;">
+                            <div>
+                                <div style="font-weight: 500;">Mike Chen</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">m.chen@school.edu</div>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem;"><span class="badge" style="background: var(--warning);">Admin</span></td>
+                        <td style="padding: 1rem;">Stanford University</td>
+                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
+                        <td style="padding: 1rem;">30 minutes ago</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 1rem;">
+                            <div>
+                                <div style="font-weight: 500;">Emily Davis</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">emily.d@college.edu</div>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem;"><span class="badge badge-submitted">Student</span></td>
+                        <td style="padding: 1rem;">UCLA</td>
+                        <td style="padding: 1rem;"><span class="badge" style="background: var(--warning);">Pending</span></td>
+                        <td style="padding: 1rem;">Never</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--success);">Approve</button>
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Reject</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem;">
+                            <div>
+                                <div style="font-weight: 500;">Prof. Robert Wilson</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">r.wilson@tech.edu</div>
+                            </div>
+                        </td>
+                        <td style="padding: 1rem;"><span class="badge badge-pending">Teacher</span></td>
+                        <td style="padding: 1rem;">CalTech</td>
+                        <td style="padding: 1rem;"><span class="badge" style="background: var(--gray-400);">Inactive</span></td>
+                        <td style="padding: 1rem;">2 weeks ago</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
+                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--success);">Activate</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div style="display: flex; justify-content: between; align-items: center; padding: 1rem; border-top: 1px solid var(--border-color);">
+                <span style="font-size: 0.875rem; color: var(--gray-600);">Showing 1-5 of 55,847 users</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">Previous</button>
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.5rem;">1</button>
+                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">2</button>
+                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">3</button>
+                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">Next</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="admin-footer.html"></div>
+
+<script th:src="@{/scripts/script.js}"></script>
+<script>
+    // Add User Form Toggle
+    document.getElementById('addUserBtn').addEventListener('click', function() {
+        const form = document.getElementById('addUserForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        if (form.style.display === 'block') {
+            document.getElementById('firstName').focus();
+        }
+    });
+
+    // Cancel Form
+    document.getElementById('cancelUserForm').addEventListener('click', function() {
+        document.getElementById('addUserForm').style.display = 'none';
+        document.getElementById('createUserForm').reset();
+    });
+
+    // Role Change Handler - Show/Hide Admin Options
+    document.getElementById('userRole').addEventListener('change', function() {
+        const adminOptions = document.getElementById('adminOptions');
+        if (this.value === 'admin') {
+            adminOptions.style.display = 'block';
+        } else {
+            adminOptions.style.display = 'none';
+            // Uncheck all admin permissions when switching from admin
+            const checkboxes = adminOptions.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+        }
+    });
+
+    // Password Toggle
+    document.getElementById('toggleTempPassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('tempPassword');
+        const toggleButton = document.getElementById('toggleTempPassword');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = '🙈';
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = '👁️';
+        }
+    });
+
+    // Generate Random Password
+    document.getElementById('generatePassword').addEventListener('click', function() {
+        const length = 12;
+        const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        document.getElementById('tempPassword').value = password;
+    });
+
+    // Form Submission
+    document.getElementById('createUserForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Collect form data
+        const formData = new FormData(this);
+        const userData = Object.fromEntries(formData);
+
+        // Collect admin permissions if admin role
+        if (userData.role === 'admin') {
+            const permissions = [];
+            const permissionCheckboxes = document.querySelectorAll('input[name="permissions"]:checked');
+            permissionCheckboxes.forEach(cb => permissions.push(cb.value));
+            userData.permissions = permissions;
+        }
+
+        // Simulate API call
+        console.log('Creating user:', userData);
+
+        // Show success message (in real app, this would be after successful API call)
+        alert('User created successfully! Welcome email sent to ' + userData.email);
+
+        // Reset form and hide
+        this.reset();
+        document.getElementById('addUserForm').style.display = 'none';
+        document.getElementById('adminOptions').style.display = 'none';
+
+        // In a real application, you would refresh the user table here
+    });
+</script>
+</body>
+
+</html>

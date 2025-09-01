@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Admin Dashboard - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>InsightEd</h3>
+                <p>Empowering education through intelligent insights and seamless learning management.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Admin Resources</h3>
+                <a th:href="@{admin/user-managerment}">User Management</a>
+                <a href="#">About</a>
+                <a th:href="@{admin/analytics}">Analytics</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Support</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Actions</h3>
+                <a th:href="@{admin/dashboard}">Dashboard</a>
+                <a th:href="@{admin/support}">Support Center</a>
+                <a href="login.html">Logout</a>
+                <a href="index.html">Home</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 InsightEd Platform. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/scrpits/script.js}"></script>
+</body>
+</html>

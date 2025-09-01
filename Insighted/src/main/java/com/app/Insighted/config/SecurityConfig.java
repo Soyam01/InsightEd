@@ -33,8 +33,8 @@ public class SecurityConfig {
                                 "/auth/**", "/login", "/", "/css/**", "/scripts/**",
                                 "/images/**"
                         ).permitAll()
-//                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-//                        .requestMatchers("/vendor/**").hasAnyRole("VENDOR")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/student/**").hasAnyRole("STUDENT")
 //                        .requestMatchers("/product/**").hasAnyRole("VENDOR", "ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 ).exceptionHandling(ex -> ex

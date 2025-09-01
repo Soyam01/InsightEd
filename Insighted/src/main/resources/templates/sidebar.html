@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+  <title>Student Dashboard - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="text-center mb-4">
+    <a th:href="@{/student/dashboard}" class="nav-brand">
+      <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px">
+    </a>
+    <p style="color: var(--gray-600); font-size: 0.875rem; margin-top: 0.5rem;">Student Portal</p>
+  </div>
+
+  <ul class="sidebar-nav">
+    <li><a th:href="@{/student/dashboard}" class="active" data-section="dashboard">📊 Dashboard</a></li>
+    <li><a th:href="@{/student/upload}" >📤 Upload Assignment</a></li>
+    <li><a th:href="@{/student/feedback}" >💬 Feedback</a></li>
+    <li><a th:href="@{/student/grades}" >📈 Grades</a></li>
+    <li><a th:href="@{/student/notification}" >🔔 Notifications</a></li>
+    <li style="margin-top: 2rem;"><a th:href="@{/logout}">🚪 Logout</a></li>
+  </ul>
+</aside>
+
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>

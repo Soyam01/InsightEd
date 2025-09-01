@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Admin Dashboard - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="text-center mb-4">
+        <a th:href="@{/admin/dashboard}" class="nav-brand">
+            <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px" alt="insighted-logo">
+        </a>
+        <p style="color: var(--gray-600); font-size: 0.875rem; margin-top: 0.5rem;">Admin Portal</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        <li><a th:href="@{/admin/dashboard}" class="active">📊 Dashboard</a></li>
+        <li><a th:href="@{/admin/user-management}">👥 User Management</a></li>
+        <li><a th:href="@{/admin/analytics}">📈 Analytics</a></li>
+        <li><a th:href="@{/admin/support}">🎧 Support</a></li>
+        <li style="margin-top: 2rem;"><a th:href="@{/logout}">🚪 Logout</a></li>
+    </ul>
+</aside>
+
+
+<script th:src="@{/scrpits/script.js}"></script>
+</body>
+</html>

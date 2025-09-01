@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Admin Dashboard - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="admin-sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="dashboard-section">
+        <div class="flex justify-between items-center mb-4">
+            <h1>Admin Dashboard</h1>
+            <div class="flex items-center gap-2">
+                <span class="badge badge-submitted">Welcome, Admin</span>
+                <button class="btn btn-ghost" id="notificationBtn">🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">5</span></button>
+            </div>
+        </div>
+
+        <!-- Overview Stats Cards -->
+        <div class="features-grid mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">👥 Total Users</h3>
+                    <p class="card-description">Active platform users</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">55,847</div>
+                <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +12% from last month</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🏫 Institutions</h3>
+                    <p class="card-description">Registered schools</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">234</div>
+                <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +8% from last month</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📄 Assignments</h3>
+                    <p class="card-description">Total submissions</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">128,943</div>
+                <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +25% from last month</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">💰 Revenue</h3>
+                    <p class="card-description">Monthly earnings</p>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">$47,592</div>
+                <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +18% from last month</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">⚡ Quick Actions</h3>
+                <p class="card-description">Common administrative tasks</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <button class="btn btn-primary">Add New Institution</button>
+                <button class="btn btn-secondary">Create User Account</button>
+                <button class="btn btn-ghost">Send System Notification</button>
+                <button class="btn btn-ghost">Generate Report</button>
+                <button class="btn btn-ghost">Backup Database</button>
+                <button class="btn btn-ghost">Update System Settings</button>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📋 Recent Activity</h3>
+                    <p class="card-description">Latest platform activities</p>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="comment-item">
+                        <div class="comment-author">New Institution Registration</div>
+                        <div class="comment-text">Stanford University joined the platform</div>
+                        <div class="comment-time">2 hours ago</div>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-author">System Update</div>
+                        <div class="comment-text">Platform updated to version 2.4.1</div>
+                        <div class="comment-time">4 hours ago</div>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-author">User Milestone</div>
+                        <div class="comment-text">50,000+ users milestone reached</div>
+                        <div class="comment-time">1 day ago</div>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-author">Security Alert</div>
+                        <div class="comment-text">Multiple failed login attempts detected</div>
+                        <div class="comment-time">2 days ago</div>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-author">Payment Processing</div>
+                        <div class="comment-text">Monthly billing cycle completed</div>
+                        <div class="comment-time">3 days ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">⚠️ System Health</h3>
+                    <p class="card-description">Platform status overview</p>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>Server Status</span>
+                        <span class="badge badge-submitted">Online</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>Database</span>
+                        <span class="badge badge-submitted">Healthy</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>API Response</span>
+                        <span class="badge badge-submitted">Fast</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>Storage Usage</span>
+                        <span class="badge badge-pending">78%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>Security</span>
+                        <span class="badge badge-submitted">Secure</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;">
+                        <span>Backup Status</span>
+                        <span class="badge badge-submitted">Up to Date</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Analytics Chart Placeholder -->
+        <div class="card" style="margin-top: 2rem;">
+            <div class="card-header">
+                <h3 class="card-title">📊 Platform Usage Analytics</h3>
+                <p class="card-description">User activity and engagement metrics</p>
+            </div>
+            <div style="height: 300px; background: var(--gray-50); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+                <div style="text-align: center; color: var(--gray-500);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+                    <h4>Analytics Chart</h4>
+                    <p style="color: var(--gray-500); font-size: 0.875rem; margin: 0.5rem 0 0;">Interactive charts showing user engagement and platform performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="admin-footer.html"></div>
+
+<script src="./script.js"></script>
+</body>
+
+</html>

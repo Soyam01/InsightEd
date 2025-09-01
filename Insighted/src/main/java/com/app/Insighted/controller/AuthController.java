@@ -54,7 +54,7 @@ public class AuthController {
         switch (role) {
             case "ROLE_ADMIN" -> redirectUrl = "/admin/dashboard";
             case "ROLE_TEACHER" -> redirectUrl = "/teacher/dashboard";
-            default -> redirectUrl = "/dashboard";
+            default -> redirectUrl = "/student/dashboard";
         }
 
         return ResponseEntity.ok(Map.of(
