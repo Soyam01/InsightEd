@@ -21,6 +21,7 @@ public class StudentPageController {
         User user = userRepo.findByEmail((String)session.getAttribute("email"));
 
         model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+        model.addAttribute("activepage", "Dashboard");
         return "student-dashboard";
     }
 }

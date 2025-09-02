@@ -19,10 +19,10 @@
     </div>
 
     <ul class="sidebar-nav">
-        <li><a th:href="@{/admin/dashboard}" class="active">📊 Dashboard</a></li>
-        <li><a th:href="@{/admin/user-management}">👥 User Management</a></li>
-        <li><a th:href="@{/admin/analytics}">📈 Analytics</a></li>
-        <li><a th:href="@{/admin/support}">🎧 Support</a></li>
+        <li><a th:href="@{/admin/dashboard}" th:classappend="${activepage == 'Dashboard'} ? 'active'">📊 Dashboard</a></li>
+        <li><a th:href="@{/admin/user-management}" th:classappend="${activepage == 'User Management'} ? 'active'">👥 User Management</a></li>
+        <li><a th:href="@{/admin/analytics}" th:classappend="${activepage == 'Analytics'} ? 'active'">📈 Analytics</a></li>
+        <li><a th:href="@{/admin/support}" th:classappend="${activepage == 'Support'} ? 'active'">🎧 Support</a></li>
         <li style="margin-top: 2rem;"><a th:href="@{/logout}">🚪 Logout</a></li>
     </ul>
 </aside>

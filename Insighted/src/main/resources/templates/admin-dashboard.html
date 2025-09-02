@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+
     <title>Admin Dashboard - InsightEd Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -19,7 +19,7 @@
     <section id="dashboard-section" class="dashboard-section">
         <div class="flex justify-between items-center mb-4">
             <h1>Admin Dashboard</h1>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2" style="gap: 12px">
                 <span class="badge badge-submitted">Welcome, Admin</span>
                 <button class="btn btn-ghost" id="notificationBtn">🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">5</span></button>
             </div>
@@ -36,14 +36,6 @@
                 <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +12% from last month</div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🏫 Institutions</h3>
-                    <p class="card-description">Registered schools</p>
-                </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">234</div>
-                <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +8% from last month</div>
-            </div>
 
             <div class="card">
                 <div class="card-header">
@@ -71,10 +63,8 @@
                 <p class="card-description">Common administrative tasks</p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                <button class="btn btn-primary">Add New Institution</button>
-                <button class="btn btn-secondary">Create User Account</button>
+                <a href="/admin/user-management" class="btn btn-ghost">Create User Account</a>
                 <button class="btn btn-ghost">Send System Notification</button>
-                <button class="btn btn-ghost">Generate Report</button>
                 <button class="btn btn-ghost">Backup Database</button>
                 <button class="btn btn-ghost">Update System Settings</button>
             </div>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+
     <title>User Management - Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -27,7 +27,7 @@
                 <h3 class="card-title">➕ Create New User</h3>
                 <p class="card-description">Add a new teacher or admin to the platform</p>
             </div>
-            <form id="createUserForm">
+            <form id="createUserForm" onsubmit="handleRegisterUser(event)">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div class="form-group">
                         <label for="firstName" class="form-label">First Name *</label>
@@ -56,41 +56,17 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div class="form-group">
-                        <label for="institution" class="form-label">Institution</label>
-                        <select id="institution" name="institution" class="form-select">
-                            <option value="">Select institution</option>
-                            <option value="harvard">Harvard University</option>
-                            <option value="mit">MIT</option>
-                            <option value="stanford">Stanford University</option>
-                            <option value="ucla">UCLA</option>
-                            <option value="caltech">CalTech</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="department" class="form-label">Department/Subject</label>
-                        <input type="text" id="department" name="department" class="form-input" placeholder="e.g., Computer Science, Mathematics">
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div class="form-group">
                         <label for="tempPassword" class="form-label">Temporary Password *</label>
                         <div style="position: relative;">
                             <input type="password" id="tempPassword" name="password" class="form-input" placeholder="Generate temporary password" required style="padding-right: 45px;">
                             <button type="button" id="generatePassword" style="position: absolute; right: 45px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--primary-blue); font-size: 14px;">Generate</button>
-                            <button type="button" id="toggleTempPassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">👁️</button>
+                            <button type="button" id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-600); font-size: 18px;">
+                                <img id="passwordIcon" th:src="@{/images/eye.png}" style="height: 15px; width: 15px">
+                            </button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="status" class="form-label">Account Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active">Active</option>
-                            <option value="pending">Pending Activation</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
                 </div>
+
 
                 <!-- Admin Specific Options -->
                 <div id="adminOptions" style="display: none; margin-bottom: 1rem;">
@@ -123,13 +99,6 @@
                             </label>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label style="display: flex; align-items: center;">
-                        <input type="checkbox" id="sendWelcomeEmail" name="sendWelcomeEmail" style="margin-right: 8px;" checked>
-                        Send welcome email with login credentials
-                    </label>
                 </div>
 
                 <div style="display: flex; gap: 1rem; justify-content: flex-end;">
@@ -165,13 +134,6 @@
                 <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">157</div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🕐 Pending</h3>
-                    <p class="card-description">Awaiting approval</p>
-                </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">23</div>
-            </div>
         </div>
 
         <!-- Search and Filters -->
@@ -326,6 +288,58 @@
 
 <script th:src="@{/scripts/script.js}"></script>
 <script>
+    //for create-user
+    async function handleRegisterUser(event){
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData);
+
+        try{
+            //data for api
+            const createUserData = {
+                firstName: data.firstName.trim(),
+                lastName: data.lastName.trim(),
+                email: data.email.trim(),
+                password: data.password.trim(),
+                role: data.role.trim()
+            };
+
+            console.log(createUserData);
+
+            const response = await fetch('/admin/create-user', {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(createUserData)
+            });
+
+            const result = await response.json();
+
+            if(response.ok){
+                showNotification(result.message, "success");
+
+                // ✅ Reset form after success
+                document.getElementById('createUserForm').reset();
+
+            }else{
+                const errorMessage = result.message || result.error || 'Registration failed. Please try again.';
+                showNotification(errorMessage, "error");
+            }
+        }catch (error){
+            console.error('Signup error:', error);
+
+            // Network or other errors
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                showNotification('Network error. Please check your connection and try again.', 'error');
+            } else {
+                showNotification('An unexpected error occurred. Please try again.', 'error');
+            }
+        }
+    }
+
     // Add User Form Toggle
     document.getElementById('addUserBtn').addEventListener('click', function() {
         const form = document.getElementById('addUserForm');
@@ -354,17 +368,19 @@
         }
     });
 
-    // Password Toggle
-    document.getElementById('toggleTempPassword').addEventListener('click', function() {
+    const eyeIcon = '[[@{/images/eye.png}]]';
+    const hideIcon = '[[@{/images/hide.png}]]';
+    // Password toggle functionality
+    document.getElementById('togglePassword').addEventListener('click', function() {
         const passwordInput = document.getElementById('tempPassword');
-        const toggleButton = document.getElementById('toggleTempPassword');
+        const toggleButton = document.getElementById('passwordIcon');
 
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            toggleButton.textContent = '🙈';
+            toggleButton.src = hideIcon;
         } else {
             passwordInput.type = 'password';
-            toggleButton.textContent = '👁️';
+            toggleButton.src = eyeIcon;
         }
     });
 
@@ -379,35 +395,8 @@
         document.getElementById('tempPassword').value = password;
     });
 
-    // Form Submission
-    document.getElementById('createUserForm').addEventListener('submit', function(e) {
-        e.preventDefault();
 
-        // Collect form data
-        const formData = new FormData(this);
-        const userData = Object.fromEntries(formData);
 
-        // Collect admin permissions if admin role
-        if (userData.role === 'admin') {
-            const permissions = [];
-            const permissionCheckboxes = document.querySelectorAll('input[name="permissions"]:checked');
-            permissionCheckboxes.forEach(cb => permissions.push(cb.value));
-            userData.permissions = permissions;
-        }
-
-        // Simulate API call
-        console.log('Creating user:', userData);
-
-        // Show success message (in real app, this would be after successful API call)
-        alert('User created successfully! Welcome email sent to ' + userData.email);
-
-        // Reset form and hide
-        this.reset();
-        document.getElementById('addUserForm').style.display = 'none';
-        document.getElementById('adminOptions').style.display = 'none';
-
-        // In a real application, you would refresh the user table here
-    });
 </script>
 </body>
 

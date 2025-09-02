@@ -20,11 +20,11 @@
   </div>
 
   <ul class="sidebar-nav">
-    <li><a th:href="@{/student/dashboard}" class="active" data-section="dashboard">📊 Dashboard</a></li>
-    <li><a th:href="@{/student/upload}" >📤 Upload Assignment</a></li>
-    <li><a th:href="@{/student/feedback}" >💬 Feedback</a></li>
-    <li><a th:href="@{/student/grades}" >📈 Grades</a></li>
-    <li><a th:href="@{/student/notification}" >🔔 Notifications</a></li>
+    <li><a th:href="@{/student/dashboard}" th:classappend="${activepage == 'Dashboard'} ? 'active'">📊 Dashboard</a></li>
+    <li><a th:href="@{/student/upload-assignment}" th:classappend="${activepage == 'Upload Assignment'} ? 'active'">📤 Upload Assignment</a></li>
+    <li><a th:href="@{/student/feedback}" th:classappend="${activepage == 'Feedback'} ? 'active'" >💬 Feedback</a></li>
+    <li><a th:href="@{/student/grades}" th:classappend="${activepage == 'Grades'} ? 'active'">📈 Grades</a></li>
+    <li><a th:href="@{/student/notification}" th:classappend="${activepage == 'Notification'} ? 'active'">🔔 Notifications</a></li>
     <li style="margin-top: 2rem;"><a th:href="@{/logout}">🚪 Logout</a></li>
   </ul>
 </aside>
