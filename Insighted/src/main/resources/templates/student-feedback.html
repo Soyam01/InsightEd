@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Feedback - InsightEd Platform</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Feedback Section -->
+    <section id="feedback-section" class="dashboard-section">
+        <div class="flex justify-between items-center mb-4">
+            <h1>Feedback</h1>
+            <select class="form-select" style="width: 200px;" id="feedbackFilter">
+                <option value="">All Assignments</option>
+                <option value="CS 101">CS 101 - Intro to CS</option>
+                <option value="CS 201">CS 201 - Data Structures</option>
+                <option value="CS 301">CS 301 - Algorithms</option>
+            </select>
+        </div>
+
+        <!-- Feedback Cards -->
+        <div style="display: grid; gap: 1rem;">
+            <!-- Recent Feedback Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="card-title" style="color: var(--primary-blue);">Essay on Machine Learning</h3>
+                            <p class="card-description">CS 101 - Introduction to Computer Science</p>
+                        </div>
+                        <span class="badge badge-reviewed">Reviewed</span>
+                    </div>
+                </div>
+                <div style="padding: 0 1.5rem 1.5rem;">
+                    <div style="background: var(--light-green); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">🎯 Grade: 92% - Excellent Work!</div>
+                        <p style="margin: 0; color: var(--gray-700);">Outstanding analysis of machine learning concepts. Your understanding of supervised and unsupervised learning is clearly demonstrated through well-structured examples.</p>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">Prof. Sarah Johnson</div>
+                        <div class="comment-text">Your introduction effectively sets the context for machine learning applications. The examples you provided from real-world scenarios show excellent research skills.</div>
+                        <div class="comment-time">2 days ago</div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">Prof. Sarah Johnson</div>
+                        <div class="comment-text">Consider expanding on the ethical implications of AI in your conclusion. This would add depth to your analysis.</div>
+                        <div class="comment-time">2 days ago</div>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                        <button class="btn btn-ghost" style="font-size: 0.875rem;">💬 Reply to Feedback</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another Feedback Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="card-title" style="color: var(--primary-blue);">Algorithm Analysis</h3>
+                            <p class="card-description">CS 301 - Advanced Algorithms</p>
+                        </div>
+                        <span class="badge badge-reviewed">Reviewed</span>
+                    </div>
+                </div>
+                <div style="padding: 0 1.5rem 1.5rem;">
+                    <div style="background: var(--light-blue); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <div style="font-weight: 600; color: var(--primary-blue); margin-bottom: 0.5rem;">🎯 Grade: 85% - Good Work</div>
+                        <p style="margin: 0; color: var(--gray-700);">Solid understanding of algorithm complexity. Your Big O analysis is accurate, though some optimizations could be explored further.</p>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">Dr. Michael Chen</div>
+                        <div class="comment-text">Your time complexity analysis for the sorting algorithms is well done. The comparative study shows good analytical thinking.</div>
+                        <div class="comment-time">5 days ago</div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">Dr. Michael Chen</div>
+                        <div class="comment-text">Try to include space complexity analysis in future assignments. It's equally important in algorithm evaluation.</div>
+                        <div class="comment-time">5 days ago</div>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                        <button class="btn btn-ghost" style="font-size: 0.875rem;">💬 Reply to Feedback</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Feedback Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="card-title" style="color: var(--gray-600);">Data Structures Project</h3>
+                            <p class="card-description">CS 201 - Data Structures</p>
+                        </div>
+                        <span class="badge badge-pending">Awaiting Feedback</span>
+                    </div>
+                </div>
+                <div style="padding: 0 1.5rem 1.5rem;">
+                    <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); text-align: center;">
+                        <p style="margin: 0; color: var(--gray-600);">⏳ Your assignment is being reviewed. Feedback will be available soon.</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: var(--gray-500);">Submitted on January 20, 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="footer.html"></div>
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>

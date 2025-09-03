@@ -24,4 +24,27 @@ public class StudentPageController {
         model.addAttribute("activepage", "Dashboard");
         return "student-dashboard";
     }
+
+    @GetMapping("/feedback")
+    public String feedbackPage(Model model){
+        model.addAttribute("activepage", "Feedback");
+        return "student-feedback";
+    }
+
+    @GetMapping("/upload-assignment")
+    public String uploadAssignmentPage(Model model){
+        model.addAttribute("activepage", "Upload Assignment");
+        return "student-upload-assignment";
+    }
+
+    @GetMapping("/grades")
+    public String gradesPage(Model model){
+        return "student-grades";
+    }
+
+    @GetMapping("/notification")
+    public String notificationPage(Model model){
+        model.addAttribute("activepage", "Notification");
+        return "student-notifications";
+    }
 }

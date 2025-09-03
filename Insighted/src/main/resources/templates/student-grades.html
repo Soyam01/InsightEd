@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+  <title>Grades - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+  <section id="grades-section" class="dashboard-section">
+    <div class="flex justify-between items-center mb-4">
+      <h1>Grades</h1>
+      <div class="flex gap-2">
+        <select class="form-select" style="width: 150px;" id="semesterFilter">
+          <option value="">All Semesters</option>
+          <option value="Fall 2024" selected>Fall 2024</option>
+          <option value="Spring 2024">Spring 2024</option>
+          <option value="Fall 2023">Fall 2023</option>
+        </select>
+        <select class="form-select" style="width: 150px;" id="courseGradeFilter">
+          <option value="">All Courses</option>
+          <option value="CS 101">CS 101</option>
+          <option value="CS 201">CS 201</option>
+          <option value="CS 301">CS 301</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Grade Overview Cards -->
+    <div class="features-grid mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📊 Current GPA</h3>
+          <p class="card-description">Fall 2024</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--success);">3.82</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📈 Cumulative GPA</h3>
+          <p class="card-description">Overall</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">3.75</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🎯 Credits Earned</h3>
+          <p class="card-description">Total credits</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">67</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">⭐ Class Rank</h3>
+          <p class="card-description">Out of 156 students</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">12th</div>
+      </div>
+    </div>
+
+    <!-- Course Grades Table -->
+    <div class="table-container">
+      <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+        <h3>Course Grades - Fall 2024</h3>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Course</th>
+          <th>Professor</th>
+          <th>Credits</th>
+          <th>Assignments</th>
+          <th>Grade</th>
+          <th>GPA Points</th>
+          <th>Progress</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <div>
+              <div style="font-weight: 600;">CS 101 - Introduction to Computer Science</div>
+              <div style="font-size: 0.875rem; color: var(--gray-500);">Introduction to programming concepts</div>
+            </div>
+          </td>
+          <td>Prof. Sarah Johnson</td>
+          <td>3</td>
+          <td>12/15</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-weight: 600; color: var(--success);">A-</span>
+              <span style="font-size: 0.875rem; color: var(--gray-500);">(92%)</span>
+            </div>
+          </td>
+          <td>3.7</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="width: 60px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                <div style="width: 80%; height: 100%; background: var(--success);"></div>
+              </div>
+              <span style="font-size: 0.875rem;">80%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <div style="font-weight: 600;">CS 201 - Data Structures</div>
+              <div style="font-size: 0.875rem; color: var(--gray-500);">Advanced data structures and algorithms</div>
+            </div>
+          </td>
+          <td>Dr. Robert Wilson</td>
+          <td>4</td>
+          <td>8/12</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-weight: 600; color: var(--primary-blue);">B+</span>
+              <span style="font-size: 0.875rem; color: var(--gray-500);">(88%)</span>
+            </div>
+          </td>
+          <td>3.3</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="width: 60px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                <div style="width: 67%; height: 100%; background: var(--primary-blue);"></div>
+              </div>
+              <span style="font-size: 0.875rem;">67%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <div style="font-weight: 600;">CS 301 - Advanced Algorithms</div>
+              <div style="font-size: 0.875rem; color: var(--gray-500);">Complex algorithmic analysis</div>
+            </div>
+          </td>
+          <td>Dr. Michael Chen</td>
+          <td>3</td>
+          <td>6/10</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-weight: 600; color: var(--warning);">B</span>
+              <span style="font-size: 0.875rem; color: var(--gray-500);">(85%)</span>
+            </div>
+          </td>
+          <td>3.0</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="width: 60px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                <div style="width: 60%; height: 100%; background: var(--warning);"></div>
+              </div>
+              <span style="font-size: 0.875rem;">60%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <div style="font-weight: 600;">MATH 210 - Discrete Mathematics</div>
+              <div style="font-size: 0.875rem; color: var(--gray-500);">Mathematical foundations</div>
+            </div>
+          </td>
+          <td>Prof. Emily Davis</td>
+          <td>3</td>
+          <td>10/12</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-weight: 600; color: var(--success);">A</span>
+              <span style="font-size: 0.875rem; color: var(--gray-500);">(95%)</span>
+            </div>
+          </td>
+          <td>4.0</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="width: 60px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                <div style="width: 83%; height: 100%; background: var(--success);"></div>
+              </div>
+              <span style="font-size: 0.875rem;">83%</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Grade Trend Chart Placeholder -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <div class="card-header">
+        <h3 class="card-title">📈 Grade Trends</h3>
+        <p class="card-description">Your academic performance over time</p>
+      </div>
+      <div style="padding: 2rem; text-align: center; background: var(--gray-50); border-radius: var(--border-radius);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+        <p style="color: var(--gray-600); margin: 0;">Grade trend visualization would appear here</p>
+        <p style="color: var(--gray-500); font-size: 0.875rem; margin: 0.5rem 0 0;">Interactive charts showing semester-wise performance</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="sidebar.html"></div>
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>
