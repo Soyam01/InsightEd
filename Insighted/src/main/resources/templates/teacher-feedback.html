@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Submissions - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="teacher-sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+  <section id="feedback-section" class="dashboard-section">
+    <div class="flex justify-between items-center mb-4">
+      <h1>Student Submissions</h1>
+      <div class="flex gap-2">
+        <input type="text" placeholder="Search students..." class="form-input" style="width: 250px;" id="searchInput">
+        <select class="form-select" style="width: 150px;" id="feedbackStatusFilter">
+          <option value="">All Status</option>
+          <option value="pending">Pending Review</option>
+          <option value="completed">Completed</option>
+          <option value="overdue">Overdue</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Feedback Stats -->
+    <div class="features-grid mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📝 Total Feedback</h3>
+          <p class="card-description">This semester</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">247</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">⏳ Pending Reviews</h3>
+          <p class="card-description">Awaiting your feedback</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">23</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">⭐ Average Rating</h3>
+          <p class="card-description">Student satisfaction</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--success);">4.8</div>
+      </div>
+
+
+    </div>
+
+    <!-- Recent Feedback Activity -->
+    <div class="table-container">
+      <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+        <h3>All Submissions</h3>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Student</th>
+          <th>Assignment</th>
+          <th>Course</th>
+          <th>Submission Date</th>
+          <th>Status</th>
+          <th>Grade</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>John Doe</td>
+          <td>Essay on Machine Learning</td>
+          <td>CS 101</td>
+          <td>Jan 15, 2024</td>
+          <td><span class="badge badge-reviewed">Reviewed</span></td>
+          <td>92%</td>
+          <td>
+            <button class="btn btn-secondary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View Feedback</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Edit</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Jane Smith</td>
+          <td>Data Structures Project</td>
+          <td>CS 201</td>
+          <td>Jan 18, 2024</td>
+          <td><span class="badge badge-pending">Pending Review</span></td>
+          <td>-</td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Review</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View Submission</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Mike Johnson</td>
+          <td>Algorithm Analysis</td>
+          <td>CS 301</td>
+          <td>Jan 20, 2024</td>
+          <td><span class="badge badge-reviewed">Reviewed</span></td>
+          <td>85%</td>
+          <td>
+            <button class="btn btn-secondary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View Feedback</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Edit</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Emily Davis</td>
+          <td>Database Design</td>
+          <td>CS 202</td>
+          <td>Jan 19, 2024</td>
+          <td><span class="badge badge-pending">Pending Review</span></td>
+          <td>-</td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Review</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View Submission</button>
+          </td>
+        </tr>
+        <tr style="background: var(--light-red);">
+          <td>Alex Chen</td>
+          <td>Software Engineering Report</td>
+          <td>CS 401</td>
+          <td>Jan 10, 2024</td>
+          <td><span class="badge" style="background: var(--error); color: white;">Overdue Review</span></td>
+          <td>-</td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Review</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View Submission</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!--- Footer ---->
+<div th:insert="teacher-footer.html"></div>
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>

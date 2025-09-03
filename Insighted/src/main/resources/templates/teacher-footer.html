@@ -4,12 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
-  <title>Student Dashboard - InsightEd Platform</title>
+  <title>Teacher Dashboard - InsightEd Platform</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
+
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
@@ -19,11 +18,11 @@
         <p>Empowering education through intelligent insights and seamless learning management.</p>
       </div>
       <div class="footer-section">
-        <h3>Student Resources</h3>
-        <a href="student-upload.html">Upload Assignment</a>
-        <a href="student-grades.html">View Grades</a>
-        <a href="student-feedback.html">Feedback</a>
-        <a href="student-notifications.html">Notifications</a>
+        <h3>Teacher Resources</h3>
+        <a href="teacher-manage-assignments.html">Manage Assignments</a>
+        <a href="teacher-submissions.html">Student Submissions</a>
+        <a href="teacher-feedback.html">Feedback</a>
+        <a href="teacher-grades.html">Grades</a>
       </div>
       <div class="footer-section">
         <h3>Support</h3>
@@ -34,7 +33,8 @@
       </div>
       <div class="footer-section">
         <h3>Quick Actions</h3>
-        <a href="student-dashboard.html">Dashboard</a>
+        <a href="teacher-dashboard.html">Dashboard</a>
+        <a href="teacher-notifications.html">Notifications</a>
         <a href="login.html">Logout</a>
         <a href="index.html">Home</a>
       </div>
@@ -45,8 +45,6 @@
   </div>
 </footer>
 
-
-<script th:src="@{/scripts/script.js}"></script>
+<script th:src="@{/scrpits/script.js}"></script>
 </body>
-
 </html>

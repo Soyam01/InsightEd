@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Admin Dashboard - InsightEd Platform</title>
+  <title>Teacher Dashboard - InsightEd Platform</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<!-- Footer -->
+<!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
   <div class="text-center mb-4">
     <a href="/teacher/dashboard" class="nav-brand">
@@ -21,9 +21,8 @@
   <ul class="sidebar-nav">
     <li><a th:href="@{/teacher/dashboard}" th:classappend="${activepage == 'Dashboard'} ? 'active'" >📊 Dashboard</a></li>
     <li><a th:href="@{/teacher/manage-assignment}" th:classappend="${activepage == 'Manage Assignment'} ? 'active'" >📋 Manage Assignments</a></li>
-    <li><a th:href="@{/teacher/student-submition}" th:classappend="${activepage == 'Student Submission'} ? 'active'">📤 Student Submissions</a></li>
-    <li><a th:href="@{/teacher/feedback}" th:classappend="${activepage == 'Feedback'} ? 'active'" >💬 Feedback</a></li>
-    <li><a th:href="@{/teacher/Grades}" th:classappend="${activepage == 'Grades'} ? 'active'">📈 Grades</a></li>
+    <li><a th:href="@{/teacher/submissions}" th:classappend="${activepage == 'Student Submission'} ? 'active'" >💬 Student Submission</a></li>
+    <li><a th:href="@{/teacher/grades}" th:classappend="${activepage == 'Grades'} ? 'active'">📈 Grades</a></li>
     <li><a th:href="@{/teacher/notification}" th:classappend="${activepage == 'Notification'} ? 'active'" >🔔 Notifications</a></li>
     <li style="margin-top: 2rem;"><a th:href="@{/logout}">🚪 Logout</a></li>
   </ul>

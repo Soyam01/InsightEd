@@ -14,4 +14,30 @@ public class TeacherPageController {
         model.addAttribute("activepage", "Dashboard");
         return "teacher-dashboard";
     }
+
+    @GetMapping("/manage-assignment")
+    public String manageAssignmentPage(Model model){
+        model.addAttribute("activepage", "Manage Assignment");
+        return "teacher-manage-assignments";
+    }
+
+
+    @GetMapping("/submissions")
+    public String feedbackPage(Model model){
+        model.addAttribute("activepage", "Student Submission");
+        return "teacher-feedback";
+    }
+
+    @GetMapping("/grades")
+    public String gradesPages(Model model){
+        model.addAttribute("activepage", "Grades");
+        return "teacher-grades";
+    }
+
+    @GetMapping("/notification")
+    public String notificationsPage(Model model){
+        model.addAttribute("activepage", "Notification");
+        return "teacher-notification";
+    }
 }
+

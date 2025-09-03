@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Grade Management - InsightEd Platform</title>
+  <link rel="stylesheet"  th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="teacher-sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+  <section id="grades-section" class="dashboard-section">
+    <div class="flex justify-between items-center mb-4">
+      <h1>Grade Management</h1>
+      <div class="flex gap-2">
+        <select class="form-select" style="width: 150px;" id="gradeCourseFilter">
+          <option value="">All Courses</option>
+          <option value="CS 101">CS 101</option>
+          <option value="CS 201">CS 201</option>
+          <option value="CS 301">CS 301</option>
+        </select>
+        <select class="form-select" style="width: 150px;" id="gradeTypeFilter">
+          <option value="">All Assignments</option>
+          <option value="essay">Essays</option>
+          <option value="project">Projects</option>
+          <option value="exam">Exams</option>
+        </select>
+        <button class="btn btn-primary">Export Grades</button>
+      </div>
+    </div>
+
+    <!-- Grade Analytics Cards -->
+    <div class="features-grid mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📊 Class Average</h3>
+          <p class="card-description">All courses</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">82.4%</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📈 Highest Grade</h3>
+          <p class="card-description">This semester</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--success);">98%</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📉 Lowest Grade</h3>
+          <p class="card-description">This semester</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--error);">45%</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🎯 Pass Rate</h3>
+          <p class="card-description">Above 70%</p>
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--success);">87%</div>
+      </div>
+    </div>
+
+    <!-- Course Grade Overview -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3 class="card-title">📚 Course Performance Overview</h3>
+        <p class="card-description">Grade distribution by course</p>
+      </div>
+      <div style="padding: 1.5rem;">
+        <div style="display: grid; gap: 1rem;">
+          <!-- CS 101 Performance -->
+          <div style="padding: 1rem; background: var(--light-blue); border-radius: var(--border-radius);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: var(--primary-blue);">CS 101 - Introduction to Computer Science</h4>
+              <span style="font-weight: 600; color: var(--primary-blue);">Avg: 87.2%</span>
+            </div>
+            <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: var(--gray-600);">
+              <span>A: 45 students</span>
+              <span>B: 67 students</span>
+              <span>C: 32 students</span>
+              <span>D: 8 students</span>
+              <span>F: 4 students</span>
+            </div>
+          </div>
+
+          <!-- CS 201 Performance -->
+          <div style="padding: 1rem; background: var(--light-green); border-radius: var(--border-radius);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: var(--success);">CS 201 - Data Structures</h4>
+              <span style="font-weight: 600; color: var(--success);">Avg: 82.8%</span>
+            </div>
+            <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: var(--gray-600);">
+              <span>A: 38 students</span>
+              <span>B: 58 students</span>
+              <span>C: 42 students</span>
+              <span>D: 14 students</span>
+              <span>F: 4 students</span>
+            </div>
+          </div>
+
+          <!-- CS 301 Performance -->
+          <div style="padding: 1rem; background: var(--gray-50); border-radius: var(--border-radius);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h4 style="margin: 0; color: var(--gray-700);">CS 301 - Advanced Algorithms</h4>
+              <span style="font-weight: 600; color: var(--warning);">Avg: 78.5%</span>
+            </div>
+            <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: var(--gray-600);">
+              <span>A: 25 students</span>
+              <span>B: 48 students</span>
+              <span>C: 55 students</span>
+              <span>D: 20 students</span>
+              <span>F: 8 students</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Grades Table -->
+    <div class="table-container">
+      <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+        <h3>Individual Student Grades</h3>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Student</th>
+          <th>Student ID</th>
+          <th>Course</th>
+          <th>Assignment</th>
+          <th>Grade</th>
+          <th>Letter Grade</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>John Doe</td>
+          <td>S12345</td>
+          <td>CS 101</td>
+          <td>Essay on Machine Learning</td>
+          <td>
+            <input type="number" class="form-input" style="width: 70px; padding: 0.25rem;" value="92" min="0" max="100">
+          </td>
+          <td><span style="font-weight: 600; color: var(--success);">A-</span></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Save</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Jane Smith</td>
+          <td>S12346</td>
+          <td>CS 201</td>
+          <td>Data Structures Project</td>
+          <td>
+            <input type="number" class="form-input" style="width: 70px; padding: 0.25rem;" value="88" min="0" max="100">
+          </td>
+          <td><span style="font-weight: 600; color: var(--primary-blue);">B+</span></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Save</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Mike Johnson</td>
+          <td>S12347</td>
+          <td>CS 301</td>
+          <td>Algorithm Analysis</td>
+          <td>
+            <input type="number" class="form-input" style="width: 70px; padding: 0.25rem;" value="85" min="0" max="100">
+          </td>
+          <td><span style="font-weight: 600; color: var(--warning);">B</span></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Save</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</button>
+          </td>
+        </tr>
+        <tr style="background: var(--light-red);">
+          <td>Alex Chen</td>
+          <td>S12348</td>
+          <td>CS 401</td>
+          <td>Software Engineering Report</td>
+          <td>
+            <input type="number" class="form-input" style="width: 70px; padding: 0.25rem;" placeholder="-" min="0" max="100">
+          </td>
+          <td><span style="color: var(--gray-500);">-</span></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Grade</button>
+            <button class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="teacher-footer.html"></div>
+
+<script th:src="@{/scripts/script.js}" ></script>
+</body>
+
+</html>
