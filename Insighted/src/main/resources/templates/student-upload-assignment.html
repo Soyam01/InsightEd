@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
     <title>Upload Assignment - InsightEd Platform</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 <!-- Sidebar -->
 <div th:insert="sidebar.html"></div>
-
 <!-- Main Content -->
 <main class="main-content">
     <!-- Upload Section -->
@@ -44,8 +42,8 @@
                     <div class="document-content" id="fileDropZone">
                         <div>
                             <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">📄 Drop your file here or click to browse</p>
-                            <p style="font-size: 0.875rem; color: var(--gray-500);">Supports PDF up to 10MB</p>
-                            <input type="file" id="assignmentFile" accept=".pdf,.doc,.docx,.txt" style="display: none;" required>
+                            <p style="font-size: 0.875rem; color: var(--gray-500);">Supports PDF files up to 50MB</p>
+                            <input type="file" id="assignmentFile" accept=".pdf" style="display: none;" required>
                         </div>
                     </div>
                     <div id="fileInfo" class="hidden" style="margin-top: 1rem; padding: 1rem; background: var(--light-blue); border-radius: var(--border-radius); color: var(--primary-blue);">
@@ -67,7 +65,6 @@
 
 <!-- Footer -->
 <div th:insert="footer.html"></div>
-
 <script th:src="@{/scripts/script.js}"></script>
 </body>
 

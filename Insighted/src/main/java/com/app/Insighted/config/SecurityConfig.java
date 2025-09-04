@@ -30,12 +30,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/**", "/login", "/", "/css/**", "/scripts/**",
+                                "/auth/**", "/", "/css/**", "/scripts/**",
                                 "/images/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .requestMatchers("/student/**").hasAnyRole("STUDENT")
-//                        .requestMatchers("/product/**").hasAnyRole("VENDOR", "ADMIN", "SUPER_ADMIN")
+                        .requestMatchers("/teacher/**").hasAnyRole("TEACHER")
                         .anyRequest().authenticated()
                 ).exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {

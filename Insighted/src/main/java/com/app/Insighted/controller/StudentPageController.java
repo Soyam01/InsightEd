@@ -32,8 +32,9 @@ public class StudentPageController {
     }
 
     @GetMapping("/upload-assignment")
-    public String uploadAssignmentPage(Model model){
+    public String uploadAssignmentPage(Model model, HttpSession session){
         model.addAttribute("activepage", "Upload Assignment");
+
         return "student-upload-assignment";
     }
 
