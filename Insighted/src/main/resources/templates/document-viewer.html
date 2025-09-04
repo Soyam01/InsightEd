@@ -1,23 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document Viewer - InsightEd Platform</title>
-  <link rel="stylesheet" href="./style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #3b82f6;
+      --light-blue: #dbeafe;
+      --very-light-blue: #f0f9ff;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --light-red: #fef2f2;
+      --border-radius: 8px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.2s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-800);
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray-600);
+    }
+
+    .btn-ghost:hover {
+      background: var(--gray-50);
+    }
+
+    .badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .badge-submitted {
+      background: var(--light-blue);
+      color: var(--primary-blue);
+    }
+
+    .document-viewer {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: calc(100vh - 120px);
+    }
+
+    .document-panel {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+    }
+
+    .feedback-panel {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+    }
+
+    .document-content {
+      background: #fefefe;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--border-radius);
+      overflow-y: auto;
+      max-height: calc(100vh - 250px);
+    }
+
+    .document-section {
+      padding: 1rem 2rem;
+      margin: 1rem 0;
+      line-height: 1.8;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .document-section:hover {
+      background: var(--very-light-blue);
+      border-left-color: var(--light-blue);
+    }
+
+    .document-section.selected {
+      background: var(--light-blue);
+      border-left-color: var(--primary-blue);
+    }
+
+    .document-section.has-feedback {
+      border-left-color: var(--success);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .document-section.has-feedback::after {
+      content: "💬";
+      position: absolute;
+      right: 1rem;
+      top: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .comment-form {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--very-light-blue);
+      border-radius: var(--border-radius);
+      border: 2px solid var(--light-blue);
+    }
+
+    .comment-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+
+    .comment-item:hover {
+      background: var(--gray-50);
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-bottom: 0.25rem;
+    }
+
+    .comment-text {
+      color: var(--gray-600);
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-time {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+    }
+
+    .section-badge {
+      font-size: 0.75rem;
+      color: var(--primary-blue);
+      background: var(--light-blue);
+      padding: 0.125rem 0.5rem;
+      border-radius: 12px;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    .grade-section {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--gray-50);
+      border-radius: var(--border-radius);
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2, h3, h4 {
+      color: var(--gray-800);
+      margin-bottom: 1rem;
+    }
+
+    .document-title {
+      padding: 2rem 2rem 1rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+  </style>
 </head>
 
 <body>
 <!-- Navigation -->
 <nav class="navbar">
   <div class="container">
-    <a href="index.html" class="nav-brand">
-      <img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px">
-    </a>
+    <a href="#" class="nav-brand">📚 InsightEd</a>
     <div class="nav-links">
       <button class="btn btn-ghost" onclick="history.back()">← Back</button>
-      <span class="badge badge-submitted">John Lewis - Essay on Machine Learning</span>
+      <span class="badge badge-submitted" id="assignmentInfo">Loading...</span>
     </div>
   </div>
 </nav>
@@ -26,7 +300,7 @@
 <div class="document-viewer" style="padding: 2rem;">
   <!-- Document Panel -->
   <div class="document-panel">
-    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
       <h3>Document Preview</h3>
       <div class="flex gap-2">
         <button class="btn btn-ghost" id="zoomOut">🔍-</button>
@@ -34,28 +308,39 @@
       </div>
     </div>
 
-    <div id="documentContent">
-      <p id="para1" class="clickable-text">Paragraph 1 text…</p>
-      <p id="para2" class="clickable-text">Paragraph 2 text…</p>
-      <p id="para3" class="clickable-text">Paragraph 3 text…</p>
+    <div class="document-content" id="documentContent">
+      <div class="document-title">
+        <h2 id="documentTitle">Loading document...</h2>
+      </div>
+      <div id="documentSections">
+        <!-- Document sections will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Panel -->
+  <div class="feedback-panel">
+    <h3 style="margin-bottom: 1rem;">Feedback & Comments</h3>
+
+    <!-- Add Comment Form -->
+    <div id="commentForm" class="comment-form hidden">
+      <h4 style="margin-bottom: 0.5rem; color: var(--primary-blue);">Add Comment</h4>
+      <p style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem;" id="selectedText"></p>
+      <textarea id="commentText" class="form-input" rows="3" placeholder="Enter your feedback..."></textarea>
+      <div class="flex gap-2 mt-2">
+        <button class="btn btn-primary" id="saveComment">Save Comment</button>
+        <button class="btn btn-ghost" id="cancelComment">Cancel</button>
+      </div>
+      <input type="hidden" id="selectedSectionId">
     </div>
 
-    <!-- Feedback Panel -->
-    <div class="feedback-panel">
-      <h3>Feedback & Comments</h3>
-      <div id="commentForm" class="hidden">
-        <h4>Add Comment</h4>
-        <p id="selectedText"></p>
-        <textarea id="commentText" rows="3" placeholder="Enter feedback..."></textarea>
-        <button id="saveComment">Save</button>
-        <button id="cancelComment">Cancel</button>
-      </div>
-
-      <div id="commentsList"></div>
+    <!-- Existing Comments -->
+    <div id="commentsList" style="flex: 1; overflow-y: auto;">
+      <!-- Comments will be loaded here -->
     </div>
 
     <!-- Grade Section (for teachers) -->
-    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--gray-50); border-radius: var(--border-radius);">
+    <div class="grade-section" id="gradeSection">
       <h4 style="margin-bottom: 0.5rem;">Grade Assignment</h4>
       <div class="flex gap-2 items-center">
         <input type="number" id="gradeInput" class="form-input" style="width: 80px;" placeholder="Grade" min="0" max="100">
@@ -66,62 +351,211 @@
   </div>
 </div>
 
-<script th:src="@{/scripts/script.js}"></script>
 <script>
-  let selectedPara = null;
-  let assignmentId = /*[[${assignment.id}]]*/ 1; // Thymeleaf injects ID
+  // Sample data - In real app, this would come from your backend
+  let assignmentData = {
+    id: 1,
+    title: "The Impact of Machine Learning on Modern Society",
+    studentName: "John Lewis",
+    course: "CS 101",
+    sections: [
+      {
+        id: 1,
+        sectionNumber: 1,
+        content: "Machine learning has revolutionized the way we interact with technology and process information in the 21st century. From recommendation systems that suggest what we should watch next to autonomous vehicles that navigate our streets, ML algorithms have become an integral part of our daily lives."
+      },
+      {
+        id: 2,
+        sectionNumber: 2,
+        content: "The applications of machine learning span across various industries including healthcare, finance, education, and entertainment. In healthcare, ML algorithms assist doctors in diagnosing diseases more accurately and quickly than traditional methods. Financial institutions use machine learning for fraud detection and risk assessment."
+      },
+      {
+        id: 3,
+        sectionNumber: 3,
+        content: "However, the rapid advancement of machine learning also raises important ethical considerations. Issues such as algorithmic bias, privacy concerns, and job displacement need to be carefully addressed as we continue to integrate these technologies into society."
+      }
+    ],
+    feedbacks: [
+      {
+        id: 1,
+        sectionId: 1,
+        comment: "Excellent introduction! You've clearly established the significance of machine learning in modern society. Consider adding specific statistics to strengthen your opening statement.",
+        author: "Prof. Sarah Johnson",
+        createdAt: "2 hours ago"
+      },
+      {
+        id: 2,
+        sectionId: 2,
+        comment: "Good coverage of applications across industries. The healthcare and finance examples are well-chosen. You might want to elaborate on the education sector applications as well.",
+        author: "Prof. Sarah Johnson",
+        createdAt: "2 hours ago"
+      }
+    ]
+  };
 
-  document.querySelectorAll(".clickable-text").forEach(p => {
-    p.addEventListener("click", () => {
-      selectedPara = p.id;
-      document.getElementById("selectedText").textContent = "Commenting on " + p.textContent;
-      document.getElementById("commentForm").classList.remove("hidden");
+  let currentUser = {
+    role: 'teacher', // or 'student'
+    name: 'Prof. Sarah Johnson'
+  };
+
+  let selectedSection = null;
+
+  // Initialize the document viewer
+  function initializeViewer() {
+    loadAssignmentInfo();
+    loadDocumentSections();
+    loadComments();
+
+    // Hide grade section if student
+    if (currentUser.role === 'student') {
+      document.getElementById('gradeSection').style.display = 'none';
+    }
+  }
+
+  function loadAssignmentInfo() {
+    document.getElementById('assignmentInfo').textContent =
+            `${assignmentData.studentName} - ${assignmentData.title}`;
+    document.getElementById('documentTitle').textContent = assignmentData.title;
+  }
+
+  function loadDocumentSections() {
+    const sectionsContainer = document.getElementById('documentSections');
+    sectionsContainer.innerHTML = '';
+
+    assignmentData.sections.forEach(section => {
+      const sectionDiv = document.createElement('div');
+      sectionDiv.className = 'document-section';
+      sectionDiv.id = `section-${section.id}`;
+      sectionDiv.innerHTML = `<p>${section.content}</p>`;
+
+      // Check if section has feedback
+      const hasFeedback = assignmentData.feedbacks.some(f => f.sectionId === section.id);
+      if (hasFeedback) {
+        sectionDiv.classList.add('has-feedback');
+      }
+
+      sectionDiv.addEventListener('click', () => selectSection(section));
+      sectionsContainer.appendChild(sectionDiv);
     });
+  }
+
+  function selectSection(section) {
+    // Only allow teachers to add comments
+    if (currentUser.role !== 'teacher') return;
+
+    // Remove previous selection
+    document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
+
+    // Select current section
+    document.getElementById(`section-${section.id}`).classList.add('selected');
+    selectedSection = section;
+
+    // Show comment form
+    document.getElementById('commentForm').classList.remove('hidden');
+    document.getElementById('selectedText').textContent = `Adding comment to paragraph ${section.sectionNumber}`;
+    document.getElementById('selectedSectionId').value = section.id;
+    document.getElementById('commentText').focus();
+  }
+
+  function loadComments() {
+    const commentsList = document.getElementById('commentsList');
+    commentsList.innerHTML = '';
+
+    assignmentData.feedbacks.forEach(feedback => {
+      const section = assignmentData.sections.find(s => s.id === feedback.sectionId);
+      const commentDiv = document.createElement('div');
+      commentDiv.className = 'comment-item';
+      commentDiv.innerHTML = `
+                    <div class="comment-author">${feedback.author}</div>
+                    <div class="comment-text">${feedback.comment}</div>
+                    <div class="comment-time">${feedback.createdAt}</div>
+                    <div style="margin-top: 0.5rem;">
+                        <span class="section-badge">Paragraph ${section.sectionNumber}</span>
+                    </div>
+                `;
+
+      // Add click handler to highlight corresponding section
+      commentDiv.addEventListener('click', () => {
+        document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
+        document.getElementById(`section-${feedback.sectionId}`).classList.add('selected');
+        document.getElementById(`section-${feedback.sectionId}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      commentsList.appendChild(commentDiv);
+    });
+  }
+
+  // Event listeners
+  document.getElementById('saveComment').addEventListener('click', function() {
+    const commentText = document.getElementById('commentText').value.trim();
+    const sectionId = parseInt(document.getElementById('selectedSectionId').value);
+
+    if (!commentText) {
+      alert('Please enter a comment');
+      return;
+    }
+
+    // Create new feedback
+    const newFeedback = {
+      id: Date.now(), // In real app, this would come from backend
+      sectionId: sectionId,
+      comment: commentText,
+      author: currentUser.name,
+      createdAt: 'Just now'
+    };
+
+    // Add to data and reload
+    assignmentData.feedbacks.push(newFeedback);
+    loadDocumentSections(); // Refresh to show feedback indicators
+    loadComments();
+
+    // Reset form
+    document.getElementById('commentForm').classList.add('hidden');
+    document.getElementById('commentText').value = '';
+    selectedSection = null;
+
+    // In real app, save to backend here
+    // saveCommentToBackend(newFeedback);
   });
 
-  document.getElementById("saveComment").addEventListener("click", () => {
-    let comment = document.getElementById("commentText").value;
-
-    fetch("/feedback/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        assignmentId: assignmentId,
-        paragraphId: selectedPara,
-        comment: comment
-      })
-    })
-            .then(res => res.text())
-            .then(msg => {
-              alert(msg);
-              // Show comment in UI
-              let div = document.createElement("div");
-              div.innerHTML = `<b>You:</b> ${comment} <span style="font-size:0.8em;color:gray">(on ${selectedPara})</span>`;
-              document.getElementById("commentsList").appendChild(div);
-              document.getElementById("commentText").value = "";
-              document.getElementById("commentForm").classList.add("hidden");
-            });
+  document.getElementById('cancelComment').addEventListener('click', function() {
+    document.getElementById('commentForm').classList.add('hidden');
+    document.getElementById('commentText').value = '';
+    document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
+    selectedSection = null;
   });
 
-  document.getElementById("cancelComment").addEventListener("click", () => {
-    document.getElementById("commentForm").classList.add("hidden");
+  document.getElementById('saveGrade').addEventListener('click', function() {
+    const grade = document.getElementById('gradeInput').value;
+    if (!grade || grade < 0 || grade > 100) {
+      alert('Please enter a valid grade (0-100)');
+      return;
+    }
+
+    // In real app, save to backend
+    alert(`Grade ${grade}% saved successfully!`);
+    // saveGradeToBackend(assignmentData.id, grade);
   });
 
-  fetch(`/feedback/byAssignment/${assignmentId}`)
-          .then(res => res.json())
-          .then(feedbacks => {
-            let list = document.getElementById("commentsList");
-            list.innerHTML = "";
-            feedbacks.forEach(fb => {
-              let div = document.createElement("div");
-              div.innerHTML = `<b>${fb.teacherName}:</b> ${fb.comment} <span style="font-size:0.8em;color:gray">(on ${fb.paragraphId})</span>`;
-              list.appendChild(div);
+  // Initialize when page loads
+  document.addEventListener('DOMContentLoaded', initializeViewer);
 
-              // Optional: highlight paragraph
-              document.getElementById(fb.paragraphId).style.background = "#e0f7fa";
-            });
-          });
+  // Mock functions for backend integration
+  function saveCommentToBackend(feedback) {
+    // fetch('/api/feedback', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(feedback)
+    // });
+  }
+
+  function saveGradeToBackend(assignmentId, grade) {
+    // fetch('/api/assignments/' + assignmentId + '/grade', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ grade: grade })
+    // });
+  }
 </script>
 </body>
-
 </html>

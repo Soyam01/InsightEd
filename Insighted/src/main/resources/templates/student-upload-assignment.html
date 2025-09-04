@@ -1,71 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
     <title>Upload Assignment - InsightEd Platform</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 <!-- Sidebar -->
 <div th:insert="sidebar.html"></div>
+
 <!-- Main Content -->
 <main class="main-content">
     <!-- Upload Section -->
     <section id="upload-section" class="dashboard-section">
         <h1>Upload Assignment</h1>
 
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success" style="margin-bottom: 1rem; padding: 1rem; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px;">
+            <span th:text="${success}"></span>
+        </div>
+
+        <div th:if="${error}" class="alert alert-error" style="margin-bottom: 1rem; padding: 1rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px;">
+            <span th:text="${error}"></span>
+        </div>
+
         <div class="card">
-            <form id="uploadForm">
+            <form id="uploadForm" th:action="@{/student/upload-assignment}" method="post" enctype="multipart/form-data" th:object="${assignment}">
+
                 <div class="form-group">
-                    <label for="assignmentTitle" class="form-label">Assignment Title</label>
-                    <input type="text" id="assignmentTitle" class="form-input" placeholder="Enter assignment title" required>
+                    <label for="title" class="form-label">Assignment Title *</label>
+                    <input type="text" id="title" name="title" th:field="*{title}" class="form-input"
+                           placeholder="Enter assignment title" required>
+                    <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Subject" class="form-label">Subject</label>
-                    <input type="text" id="Subject" class="form-input" placeholder="Enter subject" required>
+                    <label for="subject" class="form-label">Subject *</label>
+                    <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-input"
+                           placeholder="Enter subject (e.g., Computer Science, Mathematics)" required>
+                    <div th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="error-message"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="course" class="form-label">Course</label>
-                    <select id="course" class="form-select" required>
-                        <option value="">Select Professor</option>
-                        <option value="Prof. John Smith">Prof. John Smith</option>
+                    <label for="teacherId" class="form-label">Select Teacher *</label>
+                    <select id="teacherId" name="teacherId" class="form-select" required>
+                        <option value="">-- Select Teacher --</option>
+                        <option th:each="teacher : ${teachers}"
+                                th:value="${teacher.user_id}"
+                                th:text="${teacher.firstName + ' ' + teacher.lastName}">
+                        </option>
                     </select>
+                    <div class="error-message" id="teacherError" style="display: none;">Please select a teacher</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="assignmentFile" class="form-label">Assignment File</label>
-                    <div class="document-content" id="fileDropZone">
-                        <div>
+                    <label for="assignmentFile" class="form-label">Assignment File *</label>
+                    <div class="document-content" id="fileDropZone" style="border: 2px dashed #ccc; padding: 2rem; text-align: center; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
+                        <div id="dropZoneContent">
                             <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">📄 Drop your file here or click to browse</p>
-                            <p style="font-size: 0.875rem; color: var(--gray-500);">Supports PDF files up to 50MB</p>
-                            <input type="file" id="assignmentFile" accept=".pdf" style="display: none;" required>
+                            <p style="font-size: 0.875rem; color: var(--gray-500);">Supports PDF up to 50MB</p>
+                            <input type="file" id="assignmentFile" name="assignmentFile"
+                                   accept=".pdf" style="display: none;" required>
                         </div>
                     </div>
+
                     <div id="fileInfo" class="hidden" style="margin-top: 1rem; padding: 1rem; background: var(--light-blue); border-radius: var(--border-radius); color: var(--primary-blue);">
-                        <p id="fileName"></p>
-                        <button type="button" id="removeFile" style="background: none; border: none; color: var(--error); cursor: pointer; font-size: 0.875rem;">Remove file</button>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p id="fileName" style="margin: 0; font-weight: 500;"></p>
+                                <p id="fileSize" style="margin: 0; font-size: 0.875rem; opacity: 0.8;"></p>
+                            </div>
+                            <button type="button" id="removeFile" style="background: none; border: none; color: var(--error); cursor: pointer; font-size: 0.875rem; padding: 0.5rem;">
+                                ✕ Remove
+                            </button>
+                        </div>
                     </div>
+                    <div class="error-message" id="fileError" style="display: none;">Please select a file</div>
                 </div>
 
                 <div class="form-group">
                     <label for="description" class="form-label">Description (Optional)</label>
-                    <textarea id="description" class="form-input" rows="3" placeholder="Add any notes about your assignment..."></textarea>
+                    <textarea id="description" name="description" th:field="*{description}"
+                              class="form-input" rows="3"
+                              placeholder="Add any notes about your assignment, special instructions, or areas you'd like specific feedback on..."></textarea>
+                    <div style="font-size: 0.875rem; color: var(--gray-500); margin-top: 0.25rem;">
+                        This helps your teacher understand your work better and provide more targeted feedback.
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit Assignment</button>
+                <div class="form-group">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="confirmSubmission" required>
+                        <label for="confirmSubmission" style="font-size: 0.875rem; color: var(--gray-600);">
+                            I confirm that this is my original work and I understand that it will be reviewed by my selected teacher.
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-ghost" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span id="submitText">Submit Assignment</span>
+                        <span id="submitSpinner" class="hidden">Uploading...</span>
+                    </button>
+                </div>
             </form>
+        </div>
+
+        <!-- Upload Guidelines -->
+        <div class="card" style="margin-top: 2rem; background: var(--gray-50);">
+            <h3 style="color: var(--gray-800); margin-bottom: 1rem;">📋 Upload Guidelines</h3>
+            <ul style="color: var(--gray-600); line-height: 1.6;">
+                <li>Ensure your file is in PDF, DOC, DOCX, or TXT format</li>
+                <li>Maximum file size is 10MB</li>
+                <li>Use clear, descriptive titles for your assignments</li>
+                <li>Double-check that you've selected the correct teacher</li>
+                <li>Your teacher will provide detailed, paragraph-by-paragraph feedback</li>
+                <li>You'll receive a notification once your assignment has been reviewed</li>
+            </ul>
         </div>
     </section>
 </main>
 
 <!-- Footer -->
 <div th:insert="footer.html"></div>
+
 <script th:src="@{/scripts/script.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileDropZone = document.getElementById('fileDropZone');
+        const fileInput = document.getElementById('assignmentFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const removeFileBtn = document.getElementById('removeFile');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitSpinner = document.getElementById('submitSpinner');
+        const form = document.getElementById('uploadForm');
+
+        // File drop zone functionality
+        fileDropZone.addEventListener('click', () => fileInput.click());
+
+        fileDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropZone.style.borderColor = 'var(--primary-blue)';
+            fileDropZone.style.backgroundColor = 'var(--very-light-blue)';
+        });
+
+        fileDropZone.addEventListener('dragleave', () => {
+            fileDropZone.style.borderColor = '#ccc';
+            fileDropZone.style.backgroundColor = 'white';
+        });
+
+        fileDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropZone.style.borderColor = '#ccc';
+            fileDropZone.style.backgroundColor = 'white';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            // Validate file type
+            const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!allowedTypes.includes(fileExtension)) {
+                showNotification('Please select a valid file type (PDF)', 'error');
+                return;
+            }
+
+            // Validate file size (10MB = 10 * 1024 * 1024 bytes)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Display file info
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.remove('hidden');
+            document.getElementById('fileError').style.display = 'none';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        removeFileBtn.addEventListener('click', () => {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate required fields
+            let isValid = true;
+
+            if (!document.getElementById('title').value.trim()) {
+                isValid = false;
+            }
+
+            if (!document.getElementById('subject').value.trim()) {
+                isValid = false;
+            }
+
+            if (!document.getElementById('teacherId').value) {
+                document.getElementById('teacherError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('teacherError').style.display = 'none';
+            }
+
+            if (!fileInput.files.length) {
+                document.getElementById('fileError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('fileError').style.display = 'none';
+            }
+
+            if (!document.getElementById('confirmSubmission').checked) {
+                alert('Please confirm that this is your original work');
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Show loading state
+                submitText.classList.add('hidden');
+                submitSpinner.classList.remove('hidden');
+                submitBtn.disabled = true;
+
+                // Submit the form
+                form.submit();
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

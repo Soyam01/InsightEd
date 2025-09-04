@@ -16,27 +16,12 @@ public class StudentPageController {
     @Autowired
     private UserRepo userRepo;
 
-    @GetMapping("/dashboard")
-    public String studentDashboard(Model model, HttpSession session){
-        User user = userRepo.findByEmail((String)session.getAttribute("email"));
-
-        model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
-        model.addAttribute("activepage", "Dashboard");
-        return "student-dashboard";
-    }
-
     @GetMapping("/feedback")
     public String feedbackPage(Model model){
         model.addAttribute("activepage", "Feedback");
         return "student-feedback";
     }
 
-    @GetMapping("/upload-assignment")
-    public String uploadAssignmentPage(Model model, HttpSession session){
-        model.addAttribute("activepage", "Upload Assignment");
-
-        return "student-upload-assignment";
-    }
 
     @GetMapping("/grades")
     public String gradesPage(Model model){

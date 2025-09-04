@@ -9,11 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/teacher")
 public class TeacherPageController {
 
-    @GetMapping("/dashboard")
-    public String teacherDashboard(Model model){
-        model.addAttribute("activepage", "Dashboard");
-        return "teacher-dashboard";
-    }
 
     @GetMapping("/manage-assignment")
     public String manageAssignmentPage(Model model){

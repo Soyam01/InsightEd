@@ -26,7 +26,7 @@ public class AdminServices {
         toSave.setLastName(user.getLastName());
         toSave.setEmail(user.getEmail());
 
-        if(user.getRole().equals("Administrator")) {
+        if(user.getRole().equals("admin")) {
             toSave.setRole("ROLE_ADMIN");
         }else {
             toSave.setRole("ROLE_TEACHER");
