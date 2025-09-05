@@ -67,16 +67,46 @@ public class DocumentProcessingService {
         return filePath.toString();
     }
 
-    private List<String> extractTextFromPDF(String filePath) throws IOException {
-        try (PDDocument document = PDDocument.load(new File(filePath))) {
-            PDFTextStripper stripper = new PDFTextStripper();
-            String text = stripper.getText(document);
+//    private List<String> extractTextFromPDF(String filePath) throws IOException {
+//        try (PDDocument document = PDDocument.load(new File(filePath))) {
+//            PDFTextStripper stripper = new PDFTextStripper();
+//            String text = stripper.getText(document);
+//
+//            // Split into paragraphs and clean up
+//            return Arrays.stream(text.split("\n\s*\n"))
+//                    .map(String::trim)
+//                    .filter(s -> !s.isEmpty() && s.length() > 20) // Filter out very short segments
+//                    .collect(Collectors.toList());
+//        }
+//    }
+private List<String> extractTextFromPDF(String filePath) throws IOException {
+    try (PDDocument document = PDDocument.load(new File(filePath))) {
+        PDFTextStripper stripper = new PDFTextStripper();
+        String text = stripper.getText(document);
 
-            // Split into paragraphs and clean up
-            return Arrays.stream(text.split("\n\s*\n"))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty() && s.length() > 20) // Filter out very short segments
-                    .collect(Collectors.toList());
+        // Normalize line breaks
+        text = text.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
+
+        // First try splitting by double line breaks (true paragraphs)
+        String[] rawParagraphs = text.split("\\n\\s*\\n");
+
+        List<String> paragraphs = new ArrayList<>();
+        for (String para : rawParagraphs) {
+            para = para.trim();
+            if (!para.isEmpty()) {
+                // If paragraph is still very long (likely all lines joined), split further by single newlines
+                if (para.length() > 500 && para.contains("\n")) {
+                    paragraphs.addAll(Arrays.stream(para.split("\\n"))
+                            .map(String::trim)
+                            .filter(s -> !s.isEmpty() && s.length() > 20)
+                            .collect(Collectors.toList()));
+                } else {
+                    paragraphs.add(para);
+                }
+            }
         }
+        return paragraphs;
     }
+}
+
 }

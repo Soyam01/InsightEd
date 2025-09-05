@@ -86,11 +86,11 @@
         <div><strong>Submitted:</strong>
           <span th:text="${#temporals.format(assignment.submittedAt, 'MMM dd, yyyy HH:mm')}"></span>
         </div>
-        <div><strong>Status:</strong>
-          <span class="badge"
-                th:classappend="${assignment.status == T(com.app.Insighted.model.AssignmentStatus).REVIEWED} ? 'badge-reviewed' : 'badge-pending'"
-                th:text="${assignment.status}"></span>
-        </div>
+<!--        <div><strong>Status:</strong>-->
+<!--          <span class="badge"-->
+<!--                th:classappend="${assignment.status == T(com.app.Insighted.model.AssignmentStatus).REVIEWED} ? 'badge-reviewed' : 'badge-pending'"-->
+<!--                th:text="${assignment.status}"></span>-->
+<!--        </div>-->
         <div th:if="${assignment.grade != null}" style="grid-column:1 / -1;">
           <strong>Grade:</strong>
           <span style="font-size:1.25rem; font-weight:bold; color:#10b981;"
