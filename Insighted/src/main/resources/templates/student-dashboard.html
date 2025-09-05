@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Student Dashboard - InsightEd Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -20,8 +19,12 @@
         <div class="flex justify-between items-center mb-4">
             <h1>Student Dashboard</h1>
             <div class="flex items-center gap-2" style="gap:12px">
-                <span class="badge badge-submitted">Welcome, <span th:text="${username}"> John Lewis</span></span>
-                <button class="btn btn-ghost" id="notificationBtn">🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">3</span></button>
+                <span class="badge badge-submitted">
+                    Welcome, <span th:text="${user.firstName + ' ' + user.lastName}">John Lewis</span>
+                </span>
+                <button class="btn btn-ghost" id="notificationBtn">
+                    🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">3</span>
+                </button>
             </div>
         </div>
 
@@ -32,7 +35,7 @@
                     <h3 class="card-title">📝 Assignments</h3>
                     <p class="card-description">Total submitted</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">12</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${totalAssignments}">12</div>
             </div>
 
             <div class="card">
@@ -40,7 +43,7 @@
                     <h3 class="card-title">⏳ Pending</h3>
                     <p class="card-description">Awaiting feedback</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">3</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--warning);" th:text="${pendingReview}">3</div>
             </div>
 
             <div class="card">
@@ -48,61 +51,91 @@
                     <h3 class="card-title">📊 Average Grade</h3>
                     <p class="card-description">Current semester</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--success);">87%</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--success);" th:text="${avgGrade + '%'}">87%</div>
             </div>
 
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">💬 Feedback</h3>
-                    <p class="card-description">Total comments</p>
+                    <p class="card-description">Total comments received</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">45</div>
             </div>
         </div>
 
         <!-- Recent Assignments -->
         <div class="table-container">
-            <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
                 <h3>Recent Assignments</h3>
+                <a th:href="@{/student/upload-assignment}" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    + Upload New Assignment
+                </a>
             </div>
             <table class="table">
                 <thead>
                 <tr>
                     <th>Assignment</th>
-                    <th>Course</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
                     <th>Submitted</th>
-                    <th>Status</th>
+<!--                    <th>Status</th>-->
                     <th>Grade</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Essay on Machine Learning</td>
-                    <td>CS 101</td>
-                    <td>2024-01-15</td>
-                    <td><span class="badge badge-reviewed">Reviewed</span></td>
-                    <td>92%</td>
-                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
+                <tr th:each="assignment : ${assignments}">
+                    <td th:text="${assignment.title}">Essay on Machine Learning</td>
+                    <td th:text="${assignment.subject}">CS 101</td>
+                    <td th:text="${assignment.teacher != null ? (assignment.teacher.firstName + ' ' + assignment.teacher.lastName) : 'Not Assigned'}">Prof. Smith</td>
+                    <td th:text="${#temporals.format(assignment.submittedAt, 'yyyy-MM-dd')}">2024-01-15</td>
+<!--                    <td>-->
+<!--                        <span class="badge"-->
+<!--                              th:classappend="${assignment.status == T(com.app.Insighted.model.AssignmentStatus).REVIEWED} ? 'badge-reviewed' : (${assignment.status == T(com.app.Insighted.model.AssignmentStatus).IN_REVIEW} ? 'badge-in-review' : 'badge-pending')"-->
+<!--                              th:text="${assignment.status}">Reviewed</span>-->
+<!--                    </td>-->
+                    <td>
+                        <span th:if="${assignment.grade != null}"
+                              th:text="${assignment.grade + '%'}"
+                              th:style="${assignment.grade >= 90} ? 'color: var(--success); font-weight: bold;' : (${assignment.grade >= 70} ? 'color: var(--warning); font-weight: bold;' : 'color: var(--error); font-weight: bold;')">92%</span>
+                        <span th:if="${assignment.grade == null}">-</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/student/assignment/{id}(id=${assignment.id})}"
+                           class="btn btn-ghost"
+                           style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a>
+                    </td>
                 </tr>
-                <tr>
-                    <td>Data Structures Project</td>
-                    <td>CS 201</td>
-                    <td>2024-01-20</td>
-                    <td><span class="badge badge-pending">Pending</span></td>
-                    <td>-</td>
-                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
-                </tr>
-                <tr>
-                    <td>Algorithm Analysis</td>
-                    <td>CS 301</td>
-                    <td>2024-01-22</td>
-                    <td><span class="badge badge-reviewed">Reviewed</span></td>
-                    <td>85%</td>
-                    <td><a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a></td>
+                <tr th:if="${#lists.isEmpty(assignments)}">
+                    <td colspan="7" style="text-align: center; color: var(--gray-500); padding: 2rem;">
+                        No assignments yet. <a th:href="@{/student/upload-assignment}" style="color: var(--primary-blue);">Upload your first assignment</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="features-grid" style="margin-top: 2rem;">
+            <div class="card" style="cursor: pointer;" onclick="location.href='/student/upload-assignment'">
+                <div class="card-header">
+                    <h3 class="card-title">📤 Upload Assignment</h3>
+                    <p class="card-description">Submit new work for review</p>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: pointer;" onclick="location.href='/student/assignments'">
+                <div class="card-header">
+                    <h3 class="card-title">📋 View All Assignments</h3>
+                    <p class="card-description">Browse your submission history</p>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: pointer;" onclick="location.href='/student/feedback'">
+                <div class="card-header">
+                    <h3 class="card-title">💭 Recent Feedback</h3>
+                    <p class="card-description">See latest teacher comments</p>
+                </div>
+            </div>
         </div>
     </section>
 </main>
@@ -128,6 +161,19 @@
 </div>
 
 <script th:src="@{/scripts/script.js}"></script>
+<script>
+    // Notification dropdown toggle
+    document.getElementById('notificationBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = document.getElementById('notificationDropdown');
+        dropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        document.getElementById('notificationDropdown').classList.add('hidden');
+    });
+</script>
 </body>
 
 </html>

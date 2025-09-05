@@ -1,122 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document Viewer - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --primary-blue: #3b82f6;
-      --light-blue: #dbeafe;
-      --very-light-blue: #f0f9ff;
-      --gray-50: #f9fafb;
-      --gray-200: #e5e7eb;
-      --gray-600: #4b5563;
-      --gray-800: #1f2937;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --error: #ef4444;
-      --light-red: #fef2f2;
-      --border-radius: 8px;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-      --transition: all 0.2s ease;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f8fafc;
-      line-height: 1.6;
-    }
-
-    .navbar {
-      background: white;
-      border-bottom: 1px solid var(--gray-200);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-brand {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary-blue);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .btn {
-      padding: 0.75rem 1rem;
-      border-radius: var(--border-radius);
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: var(--transition);
-    }
-
-    .btn-primary {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #2563eb;
-    }
-
-    .btn-secondary {
-      background: var(--gray-200);
-      color: var(--gray-800);
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--gray-600);
-    }
-
-    .btn-ghost:hover {
-      background: var(--gray-50);
-    }
-
-    .badge {
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .badge-submitted {
-      background: var(--light-blue);
-      color: var(--primary-blue);
-    }
-
     .document-viewer {
       display: grid;
       grid-template-columns: 1fr 400px;
@@ -125,162 +15,35 @@
       margin: 0 auto;
       min-height: calc(100vh - 120px);
     }
-
-    .document-panel {
+    .document-panel, .feedback-panel {
       background: white;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-sm);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       padding: 1.5rem;
     }
-
-    .feedback-panel {
-      background: white;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-sm);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      max-height: calc(100vh - 140px);
-      overflow-y: auto;
-    }
-
-    .document-content {
-      background: #fefefe;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--border-radius);
-      overflow-y: auto;
-      max-height: calc(100vh - 250px);
-    }
-
+    .feedback-panel { display:flex; flex-direction:column; max-height:calc(100vh - 140px); overflow-y:auto; }
+    .document-content { background:#fefefe; border:1px solid #e5e7eb; border-radius:8px; overflow-y:auto; max-height:calc(100vh - 250px);}
     .document-section {
-      padding: 1rem 2rem;
-      margin: 1rem 0;
-      line-height: 1.8;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: var(--transition);
-      border-left: 3px solid transparent;
-      position: relative;
+      padding:1rem 2rem; margin:1rem 0; line-height:1.8; cursor:pointer;
+      border-radius:4px; border-left:3px solid transparent; transition:all 0.2s ease; position:relative;
+      user-select:text;
     }
-
-    .document-section:hover {
-      background: var(--very-light-blue);
-      border-left-color: var(--light-blue);
-    }
-
-    .document-section.selected {
-      background: var(--light-blue);
-      border-left-color: var(--primary-blue);
-    }
-
-    .document-section.has-feedback {
-      border-left-color: var(--success);
-      background: rgba(16, 185, 129, 0.05);
-    }
-
-    .document-section.has-feedback::after {
-      content: "💬";
-      position: absolute;
-      right: 1rem;
-      top: 0.5rem;
-      font-size: 0.875rem;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--border-radius);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .comment-form {
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      background: var(--very-light-blue);
-      border-radius: var(--border-radius);
-      border: 2px solid var(--light-blue);
-    }
-
-    .comment-item {
-      padding: 1rem;
-      border-bottom: 1px solid var(--gray-200);
-      transition: var(--transition);
-    }
-
-    .comment-item:hover {
-      background: var(--gray-50);
-    }
-
-    .comment-author {
-      font-weight: 600;
-      color: var(--gray-800);
-      margin-bottom: 0.25rem;
-    }
-
-    .comment-text {
-      color: var(--gray-600);
-      margin-bottom: 0.5rem;
-    }
-
-    .comment-time {
-      font-size: 0.75rem;
-      color: var(--gray-500);
-    }
-
-    .section-badge {
-      font-size: 0.75rem;
-      color: var(--primary-blue);
-      background: var(--light-blue);
-      padding: 0.125rem 0.5rem;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 0.5rem;
-    }
-
-    .grade-section {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: var(--gray-50);
-      border-radius: var(--border-radius);
-    }
-
-    .flex {
-      display: flex;
-    }
-
-    .gap-2 {
-      gap: 0.5rem;
-    }
-
-    .items-center {
-      align-items: center;
-    }
-
-    .mt-2 {
-      margin-top: 0.5rem;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    h2, h3, h4 {
-      color: var(--gray-800);
-      margin-bottom: 1rem;
-    }
-
-    .document-title {
-      padding: 2rem 2rem 1rem;
-      border-bottom: 1px solid var(--gray-200);
-    }
+    .document-section:hover { background:#f0f9ff; border-left-color:#dbeafe; }
+    .document-section.selected { background:#dbeafe; border-left-color:#3b82f6; user-select:none; }
+    .document-section.has-feedback { border-left-color:#10b981; background:rgba(16,185,129,0.05); }
+    .document-section.has-feedback::after { content:"💬"; position:absolute; right:1rem; top:0.5rem; font-size:0.875rem; }
+    .comment-form { margin-bottom:1.5rem; padding:1rem; background:#f0f9ff; border-radius:8px; border:2px solid #dbeafe;}
+    .comment-item { padding:1rem; border-bottom:1px solid #e5e7eb; transition:all 0.2s ease; cursor:pointer; }
+    .comment-item:hover { background:#f9fafb; }
+    .comment-author { font-weight:600; color:#1f2937; margin-bottom:0.25rem;}
+    .comment-text { color:#4b5563; margin-bottom:0.5rem;}
+    .comment-time { font-size:0.75rem; color:#6b7280;}
+    .section-badge { font-size:0.75rem; color:#3b82f6; background:#dbeafe; padding:0.125rem 0.5rem; border-radius:12px; display:inline-block; margin-top:0.5rem;}
+    .grade-section { margin-top:1.5rem; padding:1rem; background:#f9fafb; border-radius:8px; }
+    .hidden { display:none; }
+    .alert { padding:1rem; border-radius:8px; margin-bottom:1rem;}
+    .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb;}
+    .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb;}
   </style>
 </head>
 
@@ -288,274 +51,368 @@
 <!-- Navigation -->
 <nav class="navbar">
   <div class="container">
-    <a href="#" class="nav-brand">📚 InsightEd</a>
+    <a th:href="@{/dashboard}" class="nav-brand">📚 InsightEd</a>
     <div class="nav-links">
       <button class="btn btn-ghost" onclick="history.back()">← Back</button>
-      <span class="badge badge-submitted" id="assignmentInfo">Loading...</span>
+      <span class="badge badge-submitted"
+            th:text="${assignment.student.firstName + ' ' + assignment.student.lastName + ' - ' + assignment.title}">
+        Student Name - Assignment Title
+      </span>
     </div>
   </div>
 </nav>
+
+<!-- Hidden fields for JS (safe to serialize) -->
+<input type="hidden" id="assignmentId" th:value="${assignment.id}">
+<input type="hidden" id="isTeacher" th:value="${isTeacher}">
+<input type="hidden" id="currentUserFirstName" th:value="${currentUser?.firstName}">
+<input type="hidden" id="currentUserLastName" th:value="${currentUser?.lastName}">
 
 <!-- Document Viewer Layout -->
 <div class="document-viewer" style="padding: 2rem;">
   <!-- Document Panel -->
   <div class="document-panel">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
       <h3>Document Preview</h3>
-      <div class="flex gap-2">
-        <button class="btn btn-ghost" id="zoomOut">🔍-</button>
-        <button class="btn btn-ghost" id="zoomIn">🔍+</button>
+    </div>
+
+    <!-- Assignment Info -->
+    <div style="background:#f9fafb; padding:1rem; border-radius:8px; margin-bottom:1rem; border-left:4px solid #3b82f6;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-size:0.875rem;">
+        <div><strong>Student:</strong>
+          <span th:text="${assignment.student.firstName + ' ' + assignment.student.lastName}"></span>
+        </div>
+        <div><strong>Subject:</strong> <span th:text="${assignment.subject}"></span></div>
+        <div><strong>Submitted:</strong>
+          <span th:text="${#temporals.format(assignment.submittedAt, 'MMM dd, yyyy HH:mm')}"></span>
+        </div>
+        <div><strong>Status:</strong>
+          <span class="badge"
+                th:classappend="${assignment.status == T(com.app.Insighted.model.AssignmentStatus).REVIEWED} ? 'badge-reviewed' : 'badge-pending'"
+                th:text="${assignment.status}"></span>
+        </div>
+        <div th:if="${assignment.grade != null}" style="grid-column:1 / -1;">
+          <strong>Grade:</strong>
+          <span style="font-size:1.25rem; font-weight:bold; color:#10b981;"
+                th:text="${assignment.grade + '%'}"></span>
+        </div>
       </div>
     </div>
 
     <div class="document-content" id="documentContent">
-      <div class="document-title">
-        <h2 id="documentTitle">Loading document...</h2>
+      <div class="document-title" style="padding:2rem 2rem 1rem; border-bottom:1px solid #e5e7eb;">
+        <h2 th:text="${assignment.title}">Assignment Title</h2>
+        <p th:if="${assignment.description}" style="color:#6b7280; font-style:italic; margin-top:0.5rem;"
+           th:text="${assignment.description}"></p>
       </div>
+
       <div id="documentSections">
-        <!-- Document sections will be loaded here -->
+        <div th:each="section, iterStat : ${assignment.sections}"
+             class="document-section"
+             th:id="'section-' + ${section.id}"
+             th:classappend="${not #lists.isEmpty(section.feedbacks)} ? 'has-feedback' : ''"
+             th:attr="data-section-id=${section.id}">
+          <p th:text="${section.content}">Section content here</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Feedback Panel -->
   <div class="feedback-panel">
-    <h3 style="margin-bottom: 1rem;">Feedback & Comments</h3>
+    <h3 style="margin-bottom:1rem;">Feedback & Comments</h3>
 
-    <!-- Add Comment Form -->
-    <div id="commentForm" class="comment-form hidden">
-      <h4 style="margin-bottom: 0.5rem; color: var(--primary-blue);">Add Comment</h4>
-      <p style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem;" id="selectedText"></p>
-      <textarea id="commentText" class="form-input" rows="3" placeholder="Enter your feedback..."></textarea>
-      <div class="flex gap-2 mt-2">
-        <button class="btn btn-primary" id="saveComment">Save Comment</button>
-        <button class="btn btn-ghost" id="cancelComment">Cancel</button>
-      </div>
-      <input type="hidden" id="selectedSectionId">
+    <!-- Add Comment Form (Teachers Only) -->
+    <div th:if="${isTeacher}" id="commentForm" class="comment-form hidden">
+      <h4 style="margin-bottom:0.5rem; color:#3b82f6;">Add Comment</h4>
+      <p style="font-size:0.875rem; color:#6b7280; margin-bottom:1rem;" id="selectedText"></p>
+
+      <form id="feedbackForm">
+        <textarea id="commentText" class="form-input" rows="3"
+                  placeholder="Enter your feedback..." required></textarea>
+
+        <div style="margin-top:0.5rem;">
+          <label for="feedbackType" style="font-size:0.875rem; color:#6b7280;">Feedback Type:</label>
+          <select id="feedbackType" class="form-select" style="width:auto; display:inline-block; margin-left:0.5rem;">
+            <option value="GENERAL">General</option>
+            <option value="POSITIVE">Positive</option>
+            <option value="SUGGESTION">Suggestion</option>
+            <option value="QUESTION">Question</option>
+            <option value="CORRECTION">Correction</option>
+          </select>
+        </div>
+
+        <div style="margin-top:1rem;">
+          <button type="submit" class="btn btn-primary" id="saveComment">Save Comment</button>
+          <button type="button" class="btn btn-ghost" id="cancelComment">Cancel</button>
+        </div>
+        <input type="hidden" id="selectedSectionId">
+      </form>
     </div>
 
     <!-- Existing Comments -->
-    <div id="commentsList" style="flex: 1; overflow-y: auto;">
-      <!-- Comments will be loaded here -->
+    <div id="commentsList" style="flex:1; overflow-y:auto;">
+      <div th:each="feedback : ${assignment.sections}" th:remove="tag">
+        <div th:each="comment : ${feedback.feedbacks}"
+             class="comment-item"
+             th:attr="data-section-id=${feedback.id}">
+          <div class="comment-author"
+               th:text="${comment.teacher.firstName + ' ' + comment.teacher.lastName}">Teacher Name</div>
+          <div class="comment-text" th:text="${comment.comment}">Comment text</div>
+          <div class="comment-time"
+               th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy HH:mm')}">Time</div>
+          <div style="margin-top:0.5rem;">
+            <span class="section-badge" th:text="'Paragraph ' + ${feedback.sectionNumber}">Paragraph X</span>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${#lists.isEmpty(assignment.sections) or #lists.isEmpty(assignment.sections[0].feedbacks)}"
+           style="text-align:center; color:#6b7280; padding:2rem;">
+        <p>No feedback yet.</p>
+        <p th:if="${isTeacher}" style="font-size:0.875rem;">Click on any paragraph to add your first comment.</p>
+      </div>
     </div>
 
-    <!-- Grade Section (for teachers) -->
-    <div class="grade-section" id="gradeSection">
-      <h4 style="margin-bottom: 0.5rem;">Grade Assignment</h4>
-      <div class="flex gap-2 items-center">
-        <input type="number" id="gradeInput" class="form-input" style="width: 80px;" placeholder="Grade" min="0" max="100">
-        <span style="color: var(--gray-600);">/ 100</span>
-        <button class="btn btn-primary" id="saveGrade">Save Grade</button>
-      </div>
+    <!-- Grade Section -->
+    <div th:if="${isTeacher}" class="grade-section" id="gradeSection">
+      <h4 style="margin-bottom:0.5rem;">Grade Assignment</h4>
+      <form id="gradeForm">
+        <div style="margin-bottom:1rem;">
+          <input type="number" id="gradeInput" class="form-input"
+                 style="width:80px;" placeholder="Grade" min="0" max="100" step="0.1"
+                 th:value="${assignment.grade}">
+          <span style="color:#6b7280;">/ 100</span>
+          <button type="submit" class="btn btn-primary" id="saveGrade">Save Grade</button>
+        </div>
+        <textarea id="overallComments" class="form-input" rows="3"
+                  placeholder="Overall comments about the assignment..."
+                  style="margin-top:0.5rem;"></textarea>
+      </form>
     </div>
   </div>
 </div>
 
 <script>
-  // Sample data - In real app, this would come from your backend
-  let assignmentData = {
-    id: 1,
-    title: "The Impact of Machine Learning on Modern Society",
-    studentName: "John Lewis",
-    course: "CS 101",
-    sections: [
-      {
-        id: 1,
-        sectionNumber: 1,
-        content: "Machine learning has revolutionized the way we interact with technology and process information in the 21st century. From recommendation systems that suggest what we should watch next to autonomous vehicles that navigate our streets, ML algorithms have become an integral part of our daily lives."
-      },
-      {
-        id: 2,
-        sectionNumber: 2,
-        content: "The applications of machine learning span across various industries including healthcare, finance, education, and entertainment. In healthcare, ML algorithms assist doctors in diagnosing diseases more accurately and quickly than traditional methods. Financial institutions use machine learning for fraud detection and risk assessment."
-      },
-      {
-        id: 3,
-        sectionNumber: 3,
-        content: "However, the rapid advancement of machine learning also raises important ethical considerations. Issues such as algorithmic bias, privacy concerns, and job displacement need to be carefully addressed as we continue to integrate these technologies into society."
-      }
-    ],
-    feedbacks: [
-      {
-        id: 1,
-        sectionId: 1,
-        comment: "Excellent introduction! You've clearly established the significance of machine learning in modern society. Consider adding specific statistics to strengthen your opening statement.",
-        author: "Prof. Sarah Johnson",
-        createdAt: "2 hours ago"
-      },
-      {
-        id: 2,
-        sectionId: 2,
-        comment: "Good coverage of applications across industries. The healthcare and finance examples are well-chosen. You might want to elaborate on the education sector applications as well.",
-        author: "Prof. Sarah Johnson",
-        createdAt: "2 hours ago"
-      }
-    ]
-  };
-
-  let currentUser = {
-    role: 'teacher', // or 'student'
-    name: 'Prof. Sarah Johnson'
-  };
-
-  let selectedSection = null;
-
-  // Initialize the document viewer
-  function initializeViewer() {
-    loadAssignmentInfo();
-    loadDocumentSections();
-    loadComments();
-
-    // Hide grade section if student
-    if (currentUser.role === 'student') {
-      document.getElementById('gradeSection').style.display = 'none';
-    }
-  }
-
-  function loadAssignmentInfo() {
-    document.getElementById('assignmentInfo').textContent =
-            `${assignmentData.studentName} - ${assignmentData.title}`;
-    document.getElementById('documentTitle').textContent = assignmentData.title;
-  }
-
-  function loadDocumentSections() {
-    const sectionsContainer = document.getElementById('documentSections');
-    sectionsContainer.innerHTML = '';
-
-    assignmentData.sections.forEach(section => {
-      const sectionDiv = document.createElement('div');
-      sectionDiv.className = 'document-section';
-      sectionDiv.id = `section-${section.id}`;
-      sectionDiv.innerHTML = `<p>${section.content}</p>`;
-
-      // Check if section has feedback
-      const hasFeedback = assignmentData.feedbacks.some(f => f.sectionId === section.id);
-      if (hasFeedback) {
-        sectionDiv.classList.add('has-feedback');
-      }
-
-      sectionDiv.addEventListener('click', () => selectSection(section));
-      sectionsContainer.appendChild(sectionDiv);
-    });
-  }
-
-  function selectSection(section) {
-    // Only allow teachers to add comments
-    if (currentUser.role !== 'teacher') return;
-
-    // Remove previous selection
-    document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
-
-    // Select current section
-    document.getElementById(`section-${section.id}`).classList.add('selected');
-    selectedSection = section;
-
-    // Show comment form
-    document.getElementById('commentForm').classList.remove('hidden');
-    document.getElementById('selectedText').textContent = `Adding comment to paragraph ${section.sectionNumber}`;
-    document.getElementById('selectedSectionId').value = section.id;
-    document.getElementById('commentText').focus();
-  }
-
-  function loadComments() {
-    const commentsList = document.getElementById('commentsList');
-    commentsList.innerHTML = '';
-
-    assignmentData.feedbacks.forEach(feedback => {
-      const section = assignmentData.sections.find(s => s.id === feedback.sectionId);
-      const commentDiv = document.createElement('div');
-      commentDiv.className = 'comment-item';
-      commentDiv.innerHTML = `
-                    <div class="comment-author">${feedback.author}</div>
-                    <div class="comment-text">${feedback.comment}</div>
-                    <div class="comment-time">${feedback.createdAt}</div>
-                    <div style="margin-top: 0.5rem;">
-                        <span class="section-badge">Paragraph ${section.sectionNumber}</span>
-                    </div>
-                `;
-
-      // Add click handler to highlight corresponding section
-      commentDiv.addEventListener('click', () => {
-        document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
-        document.getElementById(`section-${feedback.sectionId}`).classList.add('selected');
-        document.getElementById(`section-${feedback.sectionId}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-
-      commentsList.appendChild(commentDiv);
-    });
-  }
-
-  // Event listeners
-  document.getElementById('saveComment').addEventListener('click', function() {
-    const commentText = document.getElementById('commentText').value.trim();
-    const sectionId = parseInt(document.getElementById('selectedSectionId').value);
-
-    if (!commentText) {
-      alert('Please enter a comment');
-      return;
-    }
-
-    // Create new feedback
-    const newFeedback = {
-      id: Date.now(), // In real app, this would come from backend
-      sectionId: sectionId,
-      comment: commentText,
-      author: currentUser.name,
-      createdAt: 'Just now'
+  document.addEventListener('DOMContentLoaded', function() {
+    const assignmentId = document.getElementById("assignmentId").value;
+    const isTeacher = document.getElementById("isTeacher").value === 'true';
+    const currentUser = {
+      firstName: document.getElementById("currentUserFirstName").value,
+      lastName: document.getElementById("currentUserLastName").value
     };
 
-    // Add to data and reload
-    assignmentData.feedbacks.push(newFeedback);
-    loadDocumentSections(); // Refresh to show feedback indicators
-    loadComments();
+    let selectedSection = null;
 
-    // Reset form
-    document.getElementById('commentForm').classList.add('hidden');
-    document.getElementById('commentText').value = '';
-    selectedSection = null;
+    initializeDocumentSections();
+    initializeFeedbackForm();
+    initializeGradeForm();
 
-    // In real app, save to backend here
-    // saveCommentToBackend(newFeedback);
-  });
-
-  document.getElementById('cancelComment').addEventListener('click', function() {
-    document.getElementById('commentForm').classList.add('hidden');
-    document.getElementById('commentText').value = '';
-    document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
-    selectedSection = null;
-  });
-
-  document.getElementById('saveGrade').addEventListener('click', function() {
-    const grade = document.getElementById('gradeInput').value;
-    if (!grade || grade < 0 || grade > 100) {
-      alert('Please enter a valid grade (0-100)');
-      return;
+    function initializeDocumentSections() {
+      const sections = document.querySelectorAll('.document-section');
+      sections.forEach(section => {
+        section.addEventListener('click', function() {
+          if (!isTeacher) return;
+          const sectionId = this.getAttribute('data-section-id');
+          selectSection(sectionId, this);
+        });
+      });
     }
 
-    // In real app, save to backend
-    alert(`Grade ${grade}% saved successfully!`);
-    // saveGradeToBackend(assignmentData.id, grade);
+    function selectSection(sectionId, sectionElement) {
+      document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
+      sectionElement.classList.add('selected');
+      selectedSection = sectionId;
+
+      const commentForm = document.getElementById('commentForm');
+      commentForm.classList.remove('hidden');
+
+      const sectionNumber = Array.from(sectionElement.parentNode.children).indexOf(sectionElement) + 1;
+      document.getElementById('selectedText').textContent = `Adding comment to paragraph ${sectionNumber}`;
+      document.getElementById('selectedSectionId').value = sectionId;
+      document.getElementById('commentText').focus();
+    }
+
+    function initializeFeedbackForm() {
+      if (!isTeacher) return;
+      const feedbackForm = document.getElementById('feedbackForm');
+      const cancelBtn = document.getElementById('cancelComment');
+
+      feedbackForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveFeedback();
+      });
+
+      cancelBtn?.addEventListener('click', function() {
+        hideFeedbackForm();
+      });
+    }
+
+    function initializeGradeForm() {
+      if (!isTeacher) return;
+      const gradeForm = document.getElementById('gradeForm');
+      gradeForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveGrade();
+      });
+    }
+
+    function saveFeedback() {
+      const commentText = document.getElementById('commentText').value.trim();
+      const sectionId = document.getElementById('selectedSectionId').value;
+      const feedbackType = document.getElementById('feedbackType').value;
+
+      if (!commentText) {
+        showNotification('Please enter a comment', 'error');
+        return;
+      }
+
+      const saveBtn = document.getElementById('saveComment');
+      const originalText = saveBtn.textContent;
+      saveBtn.textContent = 'Saving...';
+      saveBtn.disabled = true;
+
+      const feedbackData = {
+        sectionId: parseInt(sectionId),
+        comment: commentText,
+        feedbackType: feedbackType,
+        highlightedText: null
+      };
+
+      const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') ||
+              document.querySelector('input[name="_csrf"]')?.value || '';
+
+      fetch('/teacher/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(feedbackData)
+      })
+              .then(response => {
+                if (response.ok) {
+                  showNotification('Feedback saved successfully!', 'success');
+                  addFeedbackToUI(feedbackData, currentUser);
+                  hideFeedbackForm();
+                  const section = document.getElementById(`section-${sectionId}`);
+                  if (section) section.classList.add('has-feedback');
+                } else {
+                  return response.text().then(errorText => {
+                    throw new Error(errorText || 'Error saving feedback');
+                  });
+                }
+              })
+              .catch(error => {
+                showNotification('Error saving feedback: ' + error.message, 'error');
+              })
+              .finally(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+              });
+    }
+
+    function saveGrade() {
+      const grade = document.getElementById('gradeInput').value;
+      const overallComments = document.getElementById('overallComments').value;
+
+      if (!grade || grade < 0 || grade > 100) {
+        showNotification('Please enter a valid grade (0-100)', 'error');
+        return;
+      }
+
+      const saveBtn = document.getElementById('saveGrade');
+      const originalText = saveBtn.textContent;
+      saveBtn.textContent = 'Saving...';
+      saveBtn.disabled = true;
+
+      const gradeData = {
+        grade: parseFloat(grade),
+        overallComments: overallComments
+      };
+
+      const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') ||
+              document.querySelector('input[name="_csrf"]')?.value || '';
+
+      fetch('/teacher/grade/' + assignmentId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(gradeData)
+      })
+              .then(response => {
+                if (response.ok) {
+                  showNotification('Grade saved successfully!', 'success');
+                } else {
+                  return response.text().then(errorText => {
+                    throw new Error(errorText || 'Error saving grade');
+                  });
+                }
+              })
+              .catch(error => {
+                showNotification('Error saving grade: ' + error.message, 'error');
+              })
+              .finally(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+              });
+    }
+
+    function hideFeedbackForm() {
+      const commentForm = document.getElementById('commentForm');
+      if (commentForm) commentForm.classList.add('hidden');
+      document.getElementById('commentText').value = '';
+      document.getElementById('feedbackType').value = 'GENERAL';
+      document.querySelectorAll('.document-section').forEach(s => s.classList.remove('selected'));
+      selectedSection = null;
+    }
+
+    function addFeedbackToUI(feedbackData, teacher) {
+      const commentsList = document.getElementById('commentsList');
+      const commentDiv = document.createElement('div');
+      commentDiv.className = 'comment-item';
+      commentDiv.setAttribute('data-section-id', feedbackData.sectionId);
+
+      const section = document.getElementById('section-' + feedbackData.sectionId);
+      const sections = document.querySelectorAll('.document-section');
+      let sectionNumber = 1;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].getAttribute('data-section-id') == feedbackData.sectionId) {
+          sectionNumber = i + 1;
+          break;
+        }
+      }
+
+      commentDiv.innerHTML = `
+        <div class="comment-author">${teacher.firstName || 'Teacher'} ${teacher.lastName || ''}</div>
+        <div class="comment-text">${feedbackData.comment}</div>
+        <div class="comment-time">Just now</div>
+        <div style="margin-top:0.5rem;">
+          <span class="section-badge">Paragraph ${sectionNumber}</span>
+        </div>
+      `;
+
+      commentsList.insertBefore(commentDiv, commentsList.firstChild);
+    }
+
+    function showNotification(message, type) {
+      const existing = document.querySelectorAll('.notification');
+      existing.forEach(n => n.remove());
+      const notification = document.createElement('div');
+      notification.className = `notification alert alert-${type === 'success' ? 'success' : 'error'}`;
+      notification.style.cssText = `
+        position:fixed; top:20px; right:20px;
+        z-index:1000; min-width:300px; max-width:500px;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 5000);
+    }
   });
-
-  // Initialize when page loads
-  document.addEventListener('DOMContentLoaded', initializeViewer);
-
-  // Mock functions for backend integration
-  function saveCommentToBackend(feedback) {
-    // fetch('/api/feedback', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(feedback)
-    // });
-  }
-
-  function saveGradeToBackend(assignmentId, grade) {
-    // fetch('/api/assignments/' + assignmentId + '/grade', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ grade: grade })
-    // });
-  }
 </script>
 </body>
 </html>

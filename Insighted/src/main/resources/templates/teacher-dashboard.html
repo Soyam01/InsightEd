@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -14,96 +14,111 @@
 
 <!-- Main Content -->
 <main class="main-content">
-  <!-- Dashboard Section -->
-  <section id="dashboard-section" class="dashboard-section">
+  <section id="feedback-section" class="dashboard-section">
     <div class="flex justify-between items-center mb-4">
       <h1>Teacher Dashboard</h1>
-      <div class="flex items-center gap-2">
-        <span class="badge badge-submitted">Prof. Sarah Johnson</span>
-        <button class="btn btn-ghost" id="notificationBtn">🔔 <span class="badge" style="background: var(--error); color: white; font-size: 0.75rem; padding: 0.125rem 0.375rem;">5</span></button>
+      <div class="flex gap-2">
+        <input type="text" placeholder="Search students..." class="form-input" style="width: 250px;" id="searchInput">
+        <select class="form-select" style="width: 150px;" id="feedbackStatusFilter">
+          <option value="">All Status</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="IN_REVIEW">In Review</option>
+          <option value="REVIEWED">Reviewed</option>
+        </select>
       </div>
     </div>
 
-    <!-- Stats Cards -->
+    <!-- Welcome Message -->
+    <div style="background: var(--light-blue); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+      <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem;">
+        Welcome back, <span th:text="${user.firstName + ' ' + user.lastName}">Professor</span>!
+      </h2>
+      <p style="color: var(--gray-600); margin: 0;">You have <strong th:text="${pendingReviews}">5</strong> assignments awaiting your review.</p>
+    </div>
+
+    <!-- Feedback Stats -->
     <div class="features-grid mb-4">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">👥 Students</h3>
-          <p class="card-description">Total enrolled</p>
+          <h3 class="card-title">📝 Total Reviews</h3>
+          <p class="card-description">This semester</p>
         </div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">156</div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${totalFeedback}">247</div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">📝 Submissions</h3>
-          <p class="card-description">Pending review</p>
+          <h3 class="card-title">⏳ Pending Reviews</h3>
+          <p class="card-description">Awaiting your feedback</p>
         </div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">23</div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--warning);" th:text="${pendingReviews}">23</div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">✅ Graded</h3>
-          <p class="card-description">This week</p>
+          <h3 class="card-title">⭐ Average Grade</h3>
+          <p class="card-description">Class performance</p>
         </div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--success);">45</div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--success);" th:text="${avgGrade + '%'}">4.8</div>
       </div>
 
-      <div class="card">
+      <div class="card" style="cursor: pointer;" onclick="location.href='/teacher/analytics'">
         <div class="card-header">
-          <h3 class="card-title">📊 Avg Grade</h3>
-          <p class="card-description">Class average</p>
+          <h3 class="card-title">📊 View Analytics</h3>
+          <p class="card-description">Detailed insights</p>
         </div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">82%</div>
       </div>
     </div>
 
-    <!-- Recent Activity -->
+    <!-- Assignment Submissions -->
     <div class="table-container">
       <div style="padding: 1.5rem; border-bottom: 1px solid var(--gray-200);">
-        <h3>Recent Submissions</h3>
+        <h3>Student Submissions</h3>
       </div>
       <table class="table">
         <thead>
         <tr>
           <th>Student</th>
           <th>Assignment</th>
-          <th>Course</th>
-          <th>Submitted</th>
+          <th>Subject</th>
+          <th>Submission Date</th>
           <th>Status</th>
+          <th>Grade</th>
           <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td>Data Structures Project</td>
-          <td>CS 201</td>
-          <td>2024-01-20</td>
-          <td><span class="badge badge-pending">Pending</span></td>
+        <tr th:each="assignment : ${assignments}">
+          <td th:text="${assignment.student.firstName + ' ' + assignment.student.lastName}">John Doe</td>
+          <td th:text="${assignment.title}">Essay on Machine Learning</td>
+          <td th:text="${assignment.subject}">CS 101</td>
+          <td th:text="${#temporals.format(assignment.submittedAt, 'MMM dd, yyyy')}">Jan 15, 2024</td>
           <td>
-            <a href="document-viewer.html" class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Review</a>
+            <span class="badge"
+                  th:classappend="${assignment.status == T(com.yourpackage.enums.AssignmentStatus).REVIEWED} ? 'badge-reviewed' : (${assignment.status == T(com.yourpackage.enums.AssignmentStatus).IN_REVIEW} ? 'badge-in-review' : 'badge-pending')"
+                  th:text="${assignment.status}">Reviewed</span>
+          </td>
+          <td>
+            <span th:if="${assignment.grade != null}" th:text="${assignment.grade + '%'}">92%</span>
+            <span th:if="${assignment.grade == null}">-</span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 0.5rem;">
+              <a th:href="@{/teacher/review/{id}(id=${assignment.id})}"
+                 class="btn"
+                 th:classappend="${assignment.status == T(com.yourpackage.enums.AssignmentStatus).REVIEWED} ? 'btn-secondary' : 'btn-primary'"
+                 style="padding: 0.375rem 0.75rem; font-size: 0.875rem;"
+                 th:text="${assignment.status == T(com.yourpackage.enums.AssignmentStatus).REVIEWED} ? 'View Review' : 'Review'}">Review</a>
+
+              <button class="btn btn-ghost"
+                      style="padding: 0.375rem 0.75rem; font-size: 0.875rem;"
+                      th:onclick="'downloadAssignment(' + ${assignment.id} + ')'">Download</button>
+            </div>
           </td>
         </tr>
-        <tr>
-          <td>Jane Smith</td>
-          <td>Algorithm Analysis</td>
-          <td>CS 301</td>
-          <td>2024-01-22</td>
-          <td><span class="badge badge-pending">Pending</span></td>
-          <td>
-            <a href="document-viewer.html" class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">Review</a>
-          </td>
-        </tr>
-        <tr>
-          <td>Mike Johnson</td>
-          <td>Database Design</td>
-          <td>CS 202</td>
-          <td>2024-01-19</td>
-          <td><span class="badge badge-reviewed">Reviewed</span></td>
-          <td>
-            <a href="document-viewer.html" class="btn btn-ghost" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">View</a>
+        <tr th:if="${#lists.isEmpty(assignments)}">
+          <td colspan="7" style="text-align: center; color: var(--gray-500); padding: 2rem;">
+            No assignments found.
           </td>
         </tr>
         </tbody>
@@ -112,27 +127,46 @@
   </section>
 </main>
 
-<!-- Notification Dropdown -->
-<div id="notificationDropdown" class="hidden" style="position: fixed; top: 70px; right: 20px; width: 300px; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-xl); z-index: 100; padding: 1rem;">
-  <h3 style="margin-bottom: 1rem; color: var(--gray-800);">Recent Notifications</h3>
-  <div class="comment-item">
-    <div class="comment-author">New Submission</div>
-    <div class="comment-text">Emily Davis submitted Database Design Project.</div>
-    <div class="comment-time">5 minutes ago</div>
-  </div>
-  <div class="comment-item">
-    <div class="comment-author">Overdue Review</div>
-    <div class="comment-text">5 assignments require urgent review.</div>
-    <div class="comment-time">2 hours ago</div>
-  </div>
-  <div class="comment-item">
-    <div class="comment-author">Grade Inquiry</div>
-    <div class="comment-text">John Doe requested clarification on grade.</div>
-    <div class="comment-time">1 day ago</div>
-  </div>
-</div>
+<!-- Footer -->
+<div th:insert="teacher-footer.html"></div>
 
-<script src="./script.js"></script>
+<script th:src="@{/scripts/script.js}"></script>
+<script>
+  // Search functionality
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+      const studentName = row.cells[0]?.textContent.toLowerCase() || '';
+      const assignmentTitle = row.cells[1]?.textContent.toLowerCase() || '';
+
+      if (studentName.includes(searchTerm) || assignmentTitle.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  // Status filter
+  document.getElementById('feedbackStatusFilter').addEventListener('change', function() {
+    const selectedStatus = this.value;
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+      if (!selectedStatus || row.querySelector('.badge')?.textContent.includes(selectedStatus)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  function downloadAssignment(assignmentId) {
+    window.open(`/teacher/download/${assignmentId}`, '_blank');
+  }
+</script>
 </body>
 
 </html>

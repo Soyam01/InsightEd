@@ -122,7 +122,7 @@ public class StudentController {
 
     @GetMapping("/assignment/{assignmentId}")
     public String viewAssignment(@PathVariable Long assignmentId, Model model, Authentication auth) {
-        User student = getCurrentUser(auth);
+        User currentUser = getCurrentUser(auth);
 
         Assignment assignment = assignmentRepo.findById(assignmentId)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
@@ -131,6 +131,7 @@ public class StudentController {
         model.addAttribute("assignment", assignment);
         model.addAttribute("sections", assignment.getSections());
         model.addAttribute("isStudent", true);
+        model.addAttribute("currentUser", currentUser);
 
         return "document-viewer";
     }
