@@ -71,8 +71,6 @@ public class StudentController {
     public String uploadAssignmentPage(Model model, Authentication auth) {
         User currentUser = getCurrentUser(auth);
 
-
-
         // Get available teachers for assignment
         List<User> users = userRepository.findAll();
 

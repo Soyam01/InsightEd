@@ -4,21 +4,22 @@ package com.app.Insighted.controller;
 import com.app.Insighted.dto.FeedbackRequest;
 import com.app.Insighted.dto.GradeRequest;
 import com.app.Insighted.model.*;
-import com.app.Insighted.repository.AssignmentRepo;
-import com.app.Insighted.repository.DocumentSectionRepo;
-import com.app.Insighted.repository.FeedbackRepo;
-import com.app.Insighted.repository.UserRepo;
+import com.app.Insighted.repository.*;
 import com.app.Insighted.services.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/teacher")
@@ -38,6 +39,9 @@ public class TeacherController {
 
         @Autowired
         private DocumentSectionRepo documentSectionRepository;
+
+        @Autowired
+        private TeacherAssignmentRepo teacherAssignmentRepo;
 
         @GetMapping("/dashboard")
         public String dashboard(Model model, Authentication auth) {
@@ -67,7 +71,7 @@ public class TeacherController {
             model.addAttribute("avgGrade", Math.round(avgGrade * 10.0) / 10.0);
             model.addAttribute("activepage", "Dashboard");
 
-            return "teacher-feedback";
+            return "teacher-dashboard";
         }
 
         @GetMapping("/review/{assignmentId}")
@@ -139,9 +143,48 @@ public class TeacherController {
             }
         }
 
+        @PostMapping("/create-assignment")
+        public String createAssignment(@ModelAttribute TeacherAssignment teacherAssignment, RedirectAttributes redirectAttributes, Authentication auth){
+            try {
+                User teacher = getCurrentUser(auth);
+
+                TeacherAssignment toSave = new TeacherAssignment();
+                toSave.setTeacher(teacher);
+                toSave.setAssignmentTitle(teacherAssignment.getAssignmentTitle());
+                toSave.setCourse(teacherAssignment.getCourse());
+                toSave.setAssignmentType(teacherAssignment.getAssignmentType());
+                toSave.setTotalPoints(teacherAssignment.getTotalPoints());
+                toSave.setDueDate(teacherAssignment.getDueDate());
+                toSave.setAssignmentDescription(teacherAssignment.getAssignmentDescription());
+
+                // Add logging
+                System.out.println("Attempting to save assignment: " + toSave.getAssignmentTitle());
+
+                TeacherAssignment saved = teacherAssignmentRepo.save(toSave);
+
+                // Verify it was saved
+                System.out.println("Assignment saved with ID: " + saved.getId());
+
+                redirectAttributes.addFlashAttribute("message", "Assignment created successfully!");
+                redirectAttributes.addFlashAttribute("messageType", "success");
+                return "redirect:/teacher/manage-assignment";
+
+            } catch (Exception e) {
+                System.err.println("Error saving assignment: " + e.getMessage());
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("message", "Failed to create assignment: " + e.getMessage());
+                redirectAttributes.addFlashAttribute("messageType", "error");
+                return "redirect:/teacher/manage-assignment";
+            }
+        }
+
+
+
+
         private User getCurrentUser(Authentication auth) {
             String email = auth.getName();
             return userRepository.findUserByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
         }
+
     }

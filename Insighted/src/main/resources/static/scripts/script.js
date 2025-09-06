@@ -35,45 +35,40 @@ function initializeAssignmentManagement() {
         });
     }
 
-    if (newAssignmentForm) {
-        newAssignmentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const assignmentData = {
-                title: formData.get('assignmentTitle'),
-                course: formData.get('assignmentCourse'),
-                type: formData.get('assignmentType'),
-                points: formData.get('assignmentPoints'),
-                dueDate: formData.get('assignmentDueDate'),
-                description: formData.get('assignmentDescription'),
-                submissionFormat: formData.get('submissionFormat'),
-                category: formData.get('assignmentCategory'),
-                allowLateSubmission: formData.get('allowLateSubmission') === 'on',
-                sendNotification: formData.get('sendNotification') === 'on',
-                enablePeerReview: formData.get('enablePeerReview') === 'on'
-            };
-
-            // Validate required fields
-            if (!assignmentData.title || !assignmentData.course || !assignmentData.type ||
-                !assignmentData.points || !assignmentData.dueDate || !assignmentData.description) {
-                showNotification('Please fill in all required fields', 'error');
-                return;
-            }
-
-            // Simulate assignment creation
-            showNotification('Assignment created successfully!', 'success');
-
-            // Hide form and reset
-            assignmentForm.style.display = 'none';
-            this.reset();
-
-            // Optionally refresh the assignment list
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        });
-    }
+    // if (newAssignmentForm) {
+    //     newAssignmentForm.addEventListener('submit', function(e) {
+    //         e.preventDefault();
+    //
+    //         const formData = new FormData(this);
+    //         const assignmentData = {
+    //             title: formData.get('assignmentTitle'),
+    //             course: formData.get('assignmentCourse'),
+    //             type: formData.get('assignmentType'),
+    //             points: formData.get('assignmentPoints'),
+    //             dueDate: formData.get('assignmentDueDate'),
+    //             description: formData.get('assignmentDescription'),
+    //         };
+    //
+    //         // Validate required fields
+    //         if (!assignmentData.title || !assignmentData.course || !assignmentData.type ||
+    //             !assignmentData.points || !assignmentData.dueDate || !assignmentData.description) {
+    //             showNotification('Please fill in all required fields', 'error');
+    //             return;
+    //         }
+    //
+    //         // Simulate assignment creation
+    //         showNotification('Assignment created successfully!', 'success');
+    //
+    //         // Hide form and reset
+    //         assignmentForm.style.display = 'none';
+    //         this.reset();
+    //
+    //         // Optionally refresh the assignment list
+    //         setTimeout(() => {
+    //             window.location.reload();
+    //         }, 1000);
+    //     });
+    // }
 
     // Filter functionality
     const courseFilter = document.getElementById('assignmentFilterCourse');

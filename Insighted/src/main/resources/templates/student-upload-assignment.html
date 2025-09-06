@@ -19,14 +19,6 @@
     <section id="upload-section" class="dashboard-section">
         <h1>Upload Assignment</h1>
 
-        <!-- Success/Error Messages -->
-        <div th:if="${success}" class="alert alert-success" style="margin-bottom: 1rem; padding: 1rem; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px;">
-            <span th:text="${success}"></span>
-        </div>
-
-        <div th:if="${error}" class="alert alert-error" style="margin-bottom: 1rem; padding: 1rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px;">
-            <span th:text="${error}"></span>
-        </div>
 
         <div class="card">
             <form id="uploadForm" th:action="@{/student/upload-assignment}" method="post" enctype="multipart/form-data" th:object="${assignment}">
@@ -115,8 +107,8 @@
         <div class="card" style="margin-top: 2rem; background: var(--gray-50);">
             <h3 style="color: var(--gray-800); margin-bottom: 1rem;">📋 Upload Guidelines</h3>
             <ul style="color: var(--gray-600); line-height: 1.6;">
-                <li>Ensure your file is in PDF, DOC, DOCX, or TXT format</li>
-                <li>Maximum file size is 10MB</li>
+                <li>Ensure your file is in PDF format</li>
+                <li>Maximum file size is 50MB</li>
                 <li>Use clear, descriptive titles for your assignments</li>
                 <li>Double-check that you've selected the correct teacher</li>
                 <li>Your teacher will provide detailed, paragraph-by-paragraph feedback</li>
@@ -176,7 +168,7 @@
 
         function handleFileSelect(file) {
             // Validate file type
-            const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+            const allowedTypes = ['.pdf' ];
             const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
 
             if (!allowedTypes.includes(fileExtension)) {
@@ -184,9 +176,9 @@
                 return;
             }
 
-            // Validate file size (10MB = 10 * 1024 * 1024 bytes)
-            if (file.size > 10 * 1024 * 1024) {
-                alert('File size must be less than 10MB');
+            // Validate file size
+            if (file.size > 50 * 1024 * 1024) {
+                showNotification('File size must be less than 50MB');
                 return;
             }
 
@@ -240,7 +232,7 @@
             }
 
             if (!document.getElementById('confirmSubmission').checked) {
-                alert('Please confirm that this is your original work');
+                showNotification('Please confirm that this is your original work', 'error');
                 isValid = false;
             }
 
