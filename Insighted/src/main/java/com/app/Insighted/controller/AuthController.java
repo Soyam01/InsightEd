@@ -3,6 +3,7 @@ package com.app.Insighted.controller;
 import com.app.Insighted.dto.LoginDto;
 import com.app.Insighted.model.User;
 import com.app.Insighted.services.AuthServices;
+import com.app.Insighted.services.MailService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class AuthController {
     @Autowired
     private AuthServices authServices;
 
+    @Autowired
+    private MailService mailService;
+
     @GetMapping("/signup")
     public String signupPage() {
         return "signup";
@@ -30,6 +34,7 @@ public class AuthController {
         String isCreated = authServices.CreateUser(user);
 
         if (isCreated.equals("Account Successfully Created!")) {
+            mailService.sendWelcomeEmail(user.getEmail(), user.getFirstName());
             return ResponseEntity.ok(Map.of("message", isCreated, "type", "success"));
         } else {
             return ResponseEntity.badRequest().body(Map.of("message", isCreated, "type", "error"));
