@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Feedback - InsightEd Platform</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
 <!-- Sidebar -->
 <div th:insert="sidebar.html"></div>
@@ -21,98 +18,62 @@
             <h1>Feedback</h1>
             <select class="form-select" style="width: 200px;" id="feedbackFilter">
                 <option value="">All Assignments</option>
-                <option value="CS 101">CS 101 - Intro to CS</option>
-                <option value="CS 201">CS 201 - Data Structures</option>
-                <option value="CS 301">CS 301 - Algorithms</option>
+                <option th:each="assignment : ${assignments}"
+                        th:value="${assignment.subject}"
+                        th:text="${assignment.subject}">
+                </option>
             </select>
         </div>
 
         <!-- Feedback Cards -->
         <div style="display: grid; gap: 1rem;">
-            <!-- Recent Feedback Card -->
-            <div class="card">
+            <div th:each="assignment : ${assignments}" class="card">
                 <div class="card-header">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="card-title" style="color: var(--primary-blue);">Essay on Machine Learning</h3>
-                            <p class="card-description">CS 101 - Introduction to Computer Science</p>
+                            <h3 class="card-title" style="color: var(--primary-blue);"
+                                th:text="${assignment.title}">Assignment Title</h3>
+                            <p class="card-description"
+                               th:text="${assignment.subject}">Course Name</p>
                         </div>
-                        <span class="badge badge-reviewed">Reviewed</span>
+                        <span th:classappend="${assignment.status.name() == 'REVIEWED'} ? 'badge-reviewed badge' : 'badge badge-pending'"
+                              th:text="${assignment.status.name() == 'REVIEWED'} ? 'Reviewed' : 'Awaiting Feedback'">
+                        </span>
                     </div>
                 </div>
+
                 <div style="padding: 0 1.5rem 1.5rem;">
-                    <div style="background: var(--light-green); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
-                        <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">🎯 Grade: 92% - Excellent Work!</div>
-                    </div>
-
-                    <div class="comment-item">
-                        <div class="comment-author">Prof. Sarah Johnson</div>
-                        <div class="comment-text">Your introduction effectively sets the context for machine learning applications. The examples you provided from real-world scenarios show excellent research skills.</div>
-                        <div class="comment-time">2 days ago</div>
-                    </div>
-
-                    <div class="comment-item">
-                        <div class="comment-author">Prof. Sarah Johnson</div>
-                        <div class="comment-text">Consider expanding on the ethical implications of AI in your conclusion. This would add depth to your analysis.</div>
-                        <div class="comment-time">2 days ago</div>
-                    </div>
-
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
-                        <button class="btn btn-ghost" style="font-size: 0.875rem;">View All</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Another Feedback Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="card-title" style="color: var(--primary-blue);">Algorithm Analysis</h3>
-                            <p class="card-description">CS 301 - Advanced Algorithms</p>
+                    <!-- If reviewed, show grade + comments -->
+                    <div th:if="${assignment.status.name() == 'REVIEWED'}">
+                        <div style="background: var(--light-green); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                            <div style="font-weight: 600; color: var(--success); margin-bottom: 0.5rem;">
+                                🎯 Grade: <span th:text="${assignment.grade}"></span>%
+                            </div>
+<!--                            <p th:text="${assignment.overallFeedback}">Overall feedback text...</p>-->
                         </div>
-                        <span class="badge badge-reviewed">Reviewed</span>
-                    </div>
-                </div>
-                <div style="padding: 0 1.5rem 1.5rem;">
-                    <div style="background: var(--light-blue); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
-                        <div style="font-weight: 600; color: var(--primary-blue); margin-bottom: 0.5rem;">🎯 Grade: 85% - Good Work</div>
-                        <p style="margin: 0; color: var(--gray-700);">Solid understanding of algorithm complexity. Your Big O analysis is accurate, though some optimizations could be explored further.</p>
-                    </div>
 
-                    <div class="comment-item">
-                        <div class="comment-author">Dr. Michael Chen</div>
-                        <div class="comment-text">Your time complexity analysis for the sorting algorithms is well done. The comparative study shows good analytical thinking.</div>
-                        <div class="comment-time">5 days ago</div>
-                    </div>
-
-                    <div class="comment-item">
-                        <div class="comment-author">Dr. Michael Chen</div>
-                        <div class="comment-text">Try to include space complexity analysis in future assignments. It's equally important in algorithm evaluation.</div>
-                        <div class="comment-time">5 days ago</div>
-                    </div>
-
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
-                        <button class="btn btn-ghost" style="font-size: 0.875rem;">View All</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pending Feedback Card -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="card-title" style="color: var(--gray-600);">Data Structures Project</h3>
-                            <p class="card-description">CS 201 - Data Structures</p>
+                        <div th:each="section : ${assignment.sections}" class="comment-item">
+                            <div class="comment-author" th:text="${assignment.teacher.firstName + ' ' + assignment.teacher.lastName}">
+                                Teacher Name
+                            </div>
+<!--                            <div class="comment-text" th:each="feedback : ${section.feedbacks}"><span th:text="${feedback}"></span>Inline comment...</div>-->
+                            <div class="comment-time" th:text="${#temporals.format(assignment.reviewedAt, 'MMM dd, yyyy')}">
+                                2 days ago
+                            </div>
                         </div>
-                        <span class="badge badge-pending">Awaiting Feedback</span>
                     </div>
-                </div>
-                <div style="padding: 0 1.5rem 1.5rem;">
-                    <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); text-align: center;">
+
+                    <!-- If pending -->
+                    <div th:if="${assignment.status.name() != 'REVIEWED'}"
+                         style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); text-align: center;">
                         <p style="margin: 0; color: var(--gray-600);">⏳ Your assignment is being reviewed. Feedback will be available soon.</p>
-                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: var(--gray-500);">Submitted on January 20, 2024</p>
+                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: var(--gray-500);">
+                            Submitted on <span th:text="${#temporals.format(assignment.submittedAt, 'MMM dd, yyyy')}"></span>
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                        <a  class="btn btn-ghost" th:href="@{/student/assignment/{id}(id=${assignment.id})}" style="font-size: 0.875rem;">View All</a>
                     </div>
                 </div>
             </div>
@@ -125,5 +86,4 @@
 
 <script th:src="@{/scripts/script.js}"></script>
 </body>
-
 </html>
