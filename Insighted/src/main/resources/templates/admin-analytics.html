@@ -39,19 +39,15 @@
                     <h4 style="margin-bottom: 1rem;">📄 Assignment Activity</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Total Submissions</span>
-                        <span style="font-weight: 600;">128,943</span>
+                        <span style="font-weight: 600;" th:text="${totalSubmission}">128,943</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Graded This Month</span>
-                        <span style="font-weight: 600;">12,847</span>
+                        <span style="font-weight: 600;" th:text="${graded}">12,847</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Pending Review</span>
-                        <span style="font-weight: 600; color: var(--warning);">1,234</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Average Grade</span>
-                        <span style="font-weight: 600; color: var(--success);">82.4%</span>
+                        <span style="font-weight: 600; color: var(--warning);" th:text="${pendingReview}">1,234</span>
                     </div>
                 </div>
 
@@ -59,39 +55,11 @@
                     <h4 style="margin-bottom: 1rem;">👥 User Engagement</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Daily Active Users</span>
-                        <span style="font-weight: 600;">23,456</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Weekly Active Users</span>
-                        <span style="font-weight: 600;">45,123</span>
+                        <span style="font-weight: 600;" th:text="${activeUsers}">23,456</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Average Session Time</span>
                         <span style="font-weight: 600;">24.5 min</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Bounce Rate</span>
-                        <span style="font-weight: 600;">12.3%</span>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 style="margin-bottom: 1rem;">🏫 Institution Metrics</h4>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Active Institutions</span>
-                        <span style="font-weight: 600;">234</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>New This Month</span>
-                        <span style="font-weight: 600; color: var(--success);">18</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Renewal Rate</span>
-                        <span style="font-weight: 600; color: var(--success);">94.2%</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Average Users/Institution</span>
-                        <span style="font-weight: 600;">238</span>
                     </div>
                 </div>
             </div>

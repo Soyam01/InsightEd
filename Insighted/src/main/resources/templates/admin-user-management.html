@@ -115,7 +115,7 @@
                     <h3 class="card-title">👨‍🎓 Students</h3>
                     <p class="card-description">Active students</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">45,234</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${students}">45,234</div>
             </div>
 
             <div class="card">
@@ -123,7 +123,7 @@
                     <h3 class="card-title">👨‍🏫 Teachers</h3>
                     <p class="card-description">Active educators</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">8,456</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${teachers}">8,456</div>
             </div>
 
             <div class="card">
@@ -131,7 +131,7 @@
                     <h3 class="card-title">🔒 Admins</h3>
                     <p class="card-description">System administrators</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">157</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${admins}">157</div>
             </div>
 
         </div>
@@ -152,15 +152,6 @@
                         <option>Admins</option>
                     </select>
                 </div>
-                <div class="form-group" style="margin: 0;">
-                    <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                        <option>Pending</option>
-                    </select>
-                </div>
                 <button class="btn btn-primary">Search</button>
             </div>
         </div>
@@ -177,108 +168,32 @@
                     <tr style="border-bottom: 2px solid var(--border-color);">
                         <th style="text-align: left; padding: 1rem; font-weight: 600;">User</th>
                         <th style="text-align: left; padding: 1rem; font-weight: 600;">Role</th>
-                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Institution</th>
-                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Status</th>
-                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Last Active</th>
+                        <th style="text-align: left; padding: 1rem; font-weight: 600;">Email</th>
                         <th style="text-align: left; padding: 1rem; font-weight: 600;">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
+                    <tr style="border-bottom: 1px solid var(--border-color);" th:each="user : ${users}">
                         <td style="padding: 1rem;">
                             <div>
-                                <div style="font-weight: 500;">John Smith</div>
-                                <div style="font-size: 0.875rem; color: var(--gray-600);">john.smith@email.com</div>
+                                <div style="font-weight: 500;" th:text="${user.firstName + ' ' + user.lastName}">John Smith</div>
+
                             </div>
                         </td>
-                        <td style="padding: 1rem;"><span class="badge badge-submitted">Student</span></td>
-                        <td style="padding: 1rem;">Harvard University</td>
-                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
-                        <td style="padding: 1rem;">2 hours ago</td>
                         <td style="padding: 1rem;">
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
+                            <span
+                                class="badge" th:classappend="${user.role == roleStudent} ? 'badge-submitted' : (${user.role == roleTeacher} ? 'badge-pending' : 'badge-reviewed')" th:text="${user.role}">Student
+                            </span>
                         </td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 1rem;" th:text="${user.email}">user@gmail.com</td>
                         <td style="padding: 1rem;">
-                            <div>
-                                <div style="font-weight: 500;">Dr. Sarah Johnson</div>
-                                <div style="font-size: 0.875rem; color: var(--gray-600);">s.johnson@university.edu</div>
-                            </div>
-                        </td>
-                        <td style="padding: 1rem;"><span class="badge badge-pending">Teacher</span></td>
-                        <td style="padding: 1rem;">MIT</td>
-                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
-                        <td style="padding: 1rem;">1 day ago</td>
-                        <td style="padding: 1rem;">
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
-                        </td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;">
-                            <div>
-                                <div style="font-weight: 500;">Mike Chen</div>
-                                <div style="font-size: 0.875rem; color: var(--gray-600);">m.chen@school.edu</div>
-                            </div>
-                        </td>
-                        <td style="padding: 1rem;"><span class="badge" style="background: var(--warning);">Admin</span></td>
-                        <td style="padding: 1rem;">Stanford University</td>
-                        <td style="padding: 1rem;"><span class="badge badge-submitted">Active</span></td>
-                        <td style="padding: 1rem;">30 minutes ago</td>
-                        <td style="padding: 1rem;">
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</button>
-                        </td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;">
-                            <div>
-                                <div style="font-weight: 500;">Emily Davis</div>
-                                <div style="font-size: 0.875rem; color: var(--gray-600);">emily.d@college.edu</div>
-                            </div>
-                        </td>
-                        <td style="padding: 1rem;"><span class="badge badge-submitted">Student</span></td>
-                        <td style="padding: 1rem;">UCLA</td>
-                        <td style="padding: 1rem;"><span class="badge" style="background: var(--warning);">Pending</span></td>
-                        <td style="padding: 1rem;">Never</td>
-                        <td style="padding: 1rem;">
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--success);">Approve</button>
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1rem;">
-                            <div>
-                                <div style="font-weight: 500;">Prof. Robert Wilson</div>
-                                <div style="font-size: 0.875rem; color: var(--gray-600);">r.wilson@tech.edu</div>
-                            </div>
-                        </td>
-                        <td style="padding: 1rem;"><span class="badge badge-pending">Teacher</span></td>
-                        <td style="padding: 1rem;">CalTech</td>
-                        <td style="padding: 1rem;"><span class="badge" style="background: var(--gray-400);">Inactive</span></td>
-                        <td style="padding: 1rem;">2 weeks ago</td>
-                        <td style="padding: 1rem;">
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Edit</button>
-                            <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--success);">Activate</button>
+                            <a th:href="@{/admin/remove-user/{id}(id=${user.user_id})}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.875rem; color: var(--error);">Suspend</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination -->
-            <div style="display: flex; justify-content: between; align-items: center; padding: 1rem; border-top: 1px solid var(--border-color);">
-                <span style="font-size: 0.875rem; color: var(--gray-600);">Showing 1-5 of 55,847 users</span>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">Previous</button>
-                    <button class="btn btn-primary" style="padding: 0.25rem 0.5rem;">1</button>
-                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">2</button>
-                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">3</button>
-                    <button class="btn btn-ghost" style="padding: 0.25rem 0.5rem;">Next</button>
-                </div>
-            </div>
         </div>
     </section>
 </main>

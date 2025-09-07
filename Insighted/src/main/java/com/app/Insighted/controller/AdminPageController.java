@@ -1,5 +1,6 @@
 package com.app.Insighted.controller;
 
+import com.app.Insighted.model.Assignment;
 import com.app.Insighted.model.User;
 import com.app.Insighted.repository.AssignmentRepo;
 import com.app.Insighted.repository.UserRepo;
@@ -41,13 +42,56 @@ public class AdminPageController {
     }
 
     @GetMapping("/user-management")
-    public String userMangementPage(Model model){
+    public String userManagementPage(Model model){
+        List<User> allUsers = userRepo.findAll();
+        int studentCount = 0;
+        int teacherCount = 0;
+        int adminCount = 0;
+
+        for (User user: allUsers){
+            if("ROLE_ADMIN".equals(user.getRole())){
+                adminCount++;
+            } else if ("ROLE_TEACHER".equals(user.getRole())) {
+                teacherCount++;
+            } else if ("ROLE_STUDENT".equals(user.getRole())) {
+                studentCount++;
+            }
+        }
+
+        model.addAttribute("users", allUsers);
+        model.addAttribute("admins", adminCount);
+        model.addAttribute("teachers", teacherCount);
+        model.addAttribute("students", studentCount);
+        model.addAttribute("roleStudent", "ROLE_STUDENT");
+        model.addAttribute("roleTeacher", "ROLE_TEACHER");
+        model.addAttribute("roleAdmin", "ROLE_ADMIN");
         model.addAttribute("activepage", "User Management");
         return "admin-user-management";
     }
 
     @GetMapping("/analytics")
     public String analyticsPage(Model model){
+
+        List<Assignment> assignments = assignmentRepo.findAll();
+
+        int totalAssignments = assignments.size();
+        int graded = 0;
+        int pendingReview = 0;
+
+        for(Assignment assignment: assignments){
+            if (assignment.getGrade() != null){
+                graded++;
+            }else {
+                pendingReview++;
+            }
+        }
+
+        int allUsers = userRepo.findAll().size();
+
+        model.addAttribute("activeUsers", allUsers);
+        model.addAttribute("totalSubmission", totalAssignments);
+        model.addAttribute("graded", graded);
+        model.addAttribute("pendingReview", pendingReview);
         model.addAttribute("activepage", "Analytics");
         return "admin-analytics";
     }
@@ -62,5 +106,11 @@ public class AdminPageController {
         }else {
             return ResponseEntity.badRequest().body(Map.of("message", isUserCreated));
         }
+    }
+
+    @GetMapping("/remove-user/{id}")
+    public String removeUser(@PathVariable Long id){
+        userRepo.deleteByUserId(id);
+        return "redirect:/admin/user-management";
     }
 }
