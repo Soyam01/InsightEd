@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:insert="admin-sidebar.html"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <section class="dashboard-section">
+        <div class="flex justify-between items-center mb-4">
+            <h1>Platform Analytics</h1>
+            <div style="display: flex; gap: 1rem;">
+                <select class="form-select">
+                    <option>Last 30 Days</option>
+                    <option>Last 90 Days</option>
+                    <option>Last Year</option>
+                    <option>All Time</option>
+                </select>
+                <button class="btn btn-primary">Export Report</button>
+            </div>
+        </div>
+
+        <!-- Platform Usage Stats -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">💻 Platform Usage Statistics</h3>
+                <p class="card-description">Detailed usage metrics and performance indicators</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="margin-bottom: 1rem;">📄 Assignment Activity</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Total Submissions</span>
+                        <span style="font-weight: 600;">128,943</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Graded This Month</span>
+                        <span style="font-weight: 600;">12,847</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Pending Review</span>
+                        <span style="font-weight: 600; color: var(--warning);">1,234</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Average Grade</span>
+                        <span style="font-weight: 600; color: var(--success);">82.4%</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">👥 User Engagement</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Daily Active Users</span>
+                        <span style="font-weight: 600;">23,456</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Weekly Active Users</span>
+                        <span style="font-weight: 600;">45,123</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Average Session Time</span>
+                        <span style="font-weight: 600;">24.5 min</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Bounce Rate</span>
+                        <span style="font-weight: 600;">12.3%</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">🏫 Institution Metrics</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Active Institutions</span>
+                        <span style="font-weight: 600;">234</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>New This Month</span>
+                        <span style="font-weight: 600; color: var(--success);">18</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Renewal Rate</span>
+                        <span style="font-weight: 600; color: var(--success);">94.2%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Average Users/Institution</span>
+                        <span style="font-weight: 600;">238</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📈 User Acquisition Trends</h3>
+                    <p class="card-description">New user registrations over time</p>
+                </div>
+                <div style="height: 300px; background: var(--gray-50); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+                    <div style="text-align: center; color: var(--gray-500);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                        <h4>Line Chart</h4>
+                        <p style="color: var(--gray-500); font-size: 0.875rem;">User growth trends visualization</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🎯 User Distribution</h3>
+                    <p class="card-description">Users by role</p>
+                </div>
+                <div style="height: 300px; background: var(--gray-50); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+                    <div style="text-align: center; color: var(--gray-500);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🥧</div>
+                        <h4>Pie Chart</h4>
+                        <p style="color: var(--gray-500); font-size: 0.875rem;">Role distribution breakdown</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<!-- Footer -->
+<div th:insert="admin-footer.html"></div>
+
+<script th:src="@{/scripts/script.js}"></script>
+</body>
+
+</html>

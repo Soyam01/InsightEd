@@ -32,7 +32,7 @@
                     <h3 class="card-title">👥 Total Users</h3>
                     <p class="card-description">Active platform users</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">55,847</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${totalUsers}">55,847</div>
                 <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +12% from last month</div>
             </div>
 
@@ -42,7 +42,7 @@
                     <h3 class="card-title">📄 Assignments</h3>
                     <p class="card-description">Total submissions</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">128,943</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" th:text="${totalAssignments}">128,943</div>
                 <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +25% from last month</div>
             </div>
 
@@ -51,7 +51,7 @@
                     <h3 class="card-title">💰 Revenue</h3>
                     <p class="card-description">Monthly earnings</p>
                 </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">$47,592</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);">Rs.47,592</div>
                 <div style="font-size: 0.875rem; color: var(--success); margin-top: 0.5rem;">↗ +18% from last month</div>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
                 <a href="/admin/user-management" class="btn btn-ghost">Create User Account</a>
                 <button class="btn btn-ghost">Send System Notification</button>
-                <button class="btn btn-ghost">Backup Database</button>
+                <a href="/admin/analytics" class="btn btn-ghost">See Analytics</a>
                 <button class="btn btn-ghost">Update System Settings</button>
             </div>
         </div>
@@ -79,19 +79,14 @@
                 </div>
                 <div style="margin-top: 1rem;">
                     <div class="comment-item">
-                        <div class="comment-author">New Institution Registration</div>
-                        <div class="comment-text">Stanford University joined the platform</div>
+                        <div class="comment-author">New User Registration</div>
+                        <div class="comment-text">John Smith joined the platform</div>
                         <div class="comment-time">2 hours ago</div>
                     </div>
                     <div class="comment-item">
                         <div class="comment-author">System Update</div>
                         <div class="comment-text">Platform updated to version 2.4.1</div>
                         <div class="comment-time">4 hours ago</div>
-                    </div>
-                    <div class="comment-item">
-                        <div class="comment-author">User Milestone</div>
-                        <div class="comment-text">50,000+ users milestone reached</div>
-                        <div class="comment-time">1 day ago</div>
                     </div>
                     <div class="comment-item">
                         <div class="comment-author">Security Alert</div>
