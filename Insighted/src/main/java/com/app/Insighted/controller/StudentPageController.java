@@ -3,6 +3,7 @@ package com.app.Insighted.controller;
 import com.app.Insighted.model.Assignment;
 import com.app.Insighted.model.AssignmentStatus;
 import com.app.Insighted.model.User;
+import com.app.Insighted.repository.AssignmentRepo;
 import com.app.Insighted.repository.UserRepo;
 import com.app.Insighted.services.AssignmentService;
 import jakarta.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/student")
@@ -24,6 +26,8 @@ public class StudentPageController {
 
     @Autowired
     private AssignmentService assignmentService;
+    @Autowired
+    private AssignmentRepo assignmentRepo;
 
     @GetMapping("/feedback")
     public String feedbackPage(Model model, Authentication auth) {
@@ -47,7 +51,32 @@ public class StudentPageController {
 
 
     @GetMapping("/grades")
-    public String gradesPage(Model model){
+    public String gradesPage(Model model, HttpSession session){
+        User student = userRepo.findByEmail((String) session.getAttribute("email"));
+
+        List<Assignment> allAssignments = assignmentRepo.findByStudentOrderBySubmittedAtDesc(student);
+        // Filter only graded assignments (non-null grade)
+        List<Integer> grades = allAssignments.stream()
+                .map(Assignment::getGrade)
+                .filter(Objects::nonNull)
+                .toList();
+
+        int highestGrade = 0;
+        int lowestGrade = 0;
+        double avgGrade = 0.0;
+
+        if (!grades.isEmpty()) {
+            highestGrade = grades.stream().max(Integer::compare).orElse(0);
+            lowestGrade = grades.stream().min(Integer::compare).orElse(0);
+            avgGrade = grades.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        }
+
+        // Add attributes to frontend
+        model.addAttribute("assignments", allAssignments);
+        model.addAttribute("highestGrade", highestGrade);
+        model.addAttribute("lowestGrade", lowestGrade);
+        model.addAttribute("avgGrade", avgGrade);
+
         return "student-grades";
     }
 

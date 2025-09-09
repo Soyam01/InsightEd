@@ -4,6 +4,7 @@ import com.app.Insighted.model.Assignment;
 import com.app.Insighted.model.AssignmentStatus;
 import com.app.Insighted.model.TeacherAssignment;
 import com.app.Insighted.model.User;
+import com.app.Insighted.repository.AssignmentRepo;
 import com.app.Insighted.repository.TeacherAssignmentRepo;
 import com.app.Insighted.repository.UserRepo;
 import com.app.Insighted.services.AssignmentService;
@@ -19,6 +20,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/teacher")
@@ -32,6 +34,9 @@ public class TeacherPageController {
 
     @Autowired
     private TeacherAssignmentRepo teacherAssignmentRepo;
+
+    @Autowired
+    private AssignmentRepo assignmentRepo;
 
     @GetMapping("/manage-assignment")
     public String manageAssignmentPage(Model model, HttpSession session){
@@ -90,8 +95,42 @@ public class TeacherPageController {
     }
 
     @GetMapping("/grades")
-    public String gradesPages(Model model){
+    public String gradesPages(Model model, HttpSession session) {
         model.addAttribute("activepage", "Grades");
+
+        // 1. Get the teacher from the session
+        String email = (String) session.getAttribute("email");
+        User teacher = userRepository.findByEmail(email);
+
+        // 2. Get all assignments graded by this teacher
+        List<Assignment> allAssignments = assignmentRepo.findByTeacherOrderBySubmittedAtDesc(teacher);
+
+        // 3. Filter out assignments without a grade
+        List<Integer> grades = allAssignments.stream()
+                .map(Assignment::getGrade)
+                .filter(Objects::nonNull)
+                .toList();
+
+        int highestGrade = 0;
+        int lowestGrade = 0;
+        double avgGrade = 0.0;
+        double passRate = 0.0;
+
+        if (!grades.isEmpty()) {
+            highestGrade = grades.stream().max(Integer::compare).orElse(0);
+            lowestGrade = grades.stream().min(Integer::compare).orElse(0);
+            avgGrade = grades.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+            long passed = grades.stream().filter(g -> g >= 50).count();
+            passRate = (passed * 100.0) / grades.size();
+        }
+
+        // 5. Add to model
+        model.addAttribute("highestGrade", highestGrade);
+        model.addAttribute("lowestGrade", lowestGrade);
+        model.addAttribute("avgGrade", avgGrade);
+        model.addAttribute("passRate", String.format("%.2f", passRate));
+        model.addAttribute("assignments", allAssignments);
+
         return "teacher-grades";
     }
 
