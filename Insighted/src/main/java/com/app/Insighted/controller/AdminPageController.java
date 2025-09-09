@@ -5,6 +5,7 @@ import com.app.Insighted.model.User;
 import com.app.Insighted.repository.AssignmentRepo;
 import com.app.Insighted.repository.UserRepo;
 import com.app.Insighted.services.AdminServices;
+import com.app.Insighted.services.MailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,9 @@ public class AdminPageController {
 
     @Autowired
     private AssignmentRepo assignmentRepo;
+
+    @Autowired
+    private MailService mailService;
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, HttpSession session){
@@ -98,10 +102,13 @@ public class AdminPageController {
 
     @PostMapping("/create-user")
     @ResponseBody
-    public ResponseEntity<?> createUser(Model model, @RequestBody User user){
+    public ResponseEntity<?> createUser(Model model, @RequestBody User user, HttpSession session){
         String isUserCreated = adminServices.createUser(user);
 
+        User admin = userRepo.findByEmail((String) session.getAttribute("email"));
+        String adminName = admin.getFirstName() + " " + admin.getLastName();
         if(isUserCreated.equals("User Created Successfully!")){
+            mailService.accountCreatedEmail(user.getEmail(), admin.getEmail(),adminName,user.getFirstName(),user.getLastName(),user.getPassword(), user.getRole());
             return ResponseEntity.ok().body(Map.of("message", isUserCreated));
         }else {
             return ResponseEntity.badRequest().body(Map.of("message", isUserCreated));

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify OTP - InsightEd Platform</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .otp-input-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .otp-input {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      background: white;
+      color: var(--gray-900);
+      transition: all 0.2s;
+    }
+
+    .otp-input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .otp-input.filled {
+      border-color: var(--primary-blue);
+      background-color: var(--blue-50);
+    }
+
+    .timer {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .resend-btn {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 0.875rem;
+    }
+
+    .resend-btn:hover {
+      text-decoration: underline;
+    }
+
+    .resend-btn:disabled {
+      color: var(--gray-400);
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand"><img th:src="@{/images/insighted_logo.png}" style="width: 120px; height: 55px"></a>
+    <div class="nav-links">
+      <ul>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/auth/login" class="btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- OTP Verification Form -->
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
+  <div class="container">
+    <div style="max-width: 500px; margin: 0 auto;">
+      <div class="card animate-fade-in-up">
+        <div class="text-center mb-4">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px;">
+            📧
+          </div>
+          <h1 style="margin-bottom: 8px;">Verify Your Email</h1>
+          <p style="color: var(--gray-600); margin: 0;">
+            We've sent a 6-digit verification code to<br>
+            <strong th:text="${email}"></strong>
+          </p>
+        </div>
+
+        <form action="/auth/verify-otp" method="post">
+          <!-- Hidden email field -->
+          <input type="hidden" name="email" th:value="${email}">
+          <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+          <div class="form-group">
+            <label class="form-label" style="text-align: center; display: block; margin-bottom: 10px;">Enter Verification Code</label>
+            <div class="otp-input-container">
+              <input type="text" class="otp-input" maxlength="1" data-index="0" name="otpDigits">
+              <input type="text" class="otp-input" maxlength="1" data-index="1" name="otpDigits">
+              <input type="text" class="otp-input" maxlength="1" data-index="2" name="otpDigits">
+              <input type="text" class="otp-input" maxlength="1" data-index="3" name="otpDigits">
+              <input type="text" class="otp-input" maxlength="1" data-index="4" name="otpDigits">
+              <input type="text" class="otp-input" maxlength="1" data-index="5" name="otpDigits">
+            </div>
+          </div>
+
+          <div class="timer">
+            Code expires in: <span id="countdown">05:00</span>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary w-full">Verify Code</button>
+          </div>
+
+          <div class="text-center">
+            <p style="color: var(--gray-600); font-size: 0.875rem; margin-bottom: 15px;">
+              Didn't receive the code?
+              <button type="button" class="resend-btn" id="resendBtn" disabled>Resend Code</button>
+            </p>
+
+            <p style="color: var(--gray-600); font-size: 0.875rem;">
+              <a href="/auth/reset-password" style="color: var(--primary-blue); text-decoration: none; font-weight: 500;">← Back to Email Entry</a>
+            </p>
+
+            <div style="border-top: 1px solid var(--gray-200); padding-top: 20px; margin-top: 20px;">
+              <p style="color: var(--gray-500); font-size: 0.8rem; margin: 0;">
+                Having trouble? <a href="mailto:support@insighted.com" style="color: var(--primary-blue); text-decoration: none;">Contact Support</a>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/scripts/script.js}"></script>
+<script>
+
+  // OTP Input handling
+  const otpInputs = document.querySelectorAll('.otp-input');
+  const verifyBtn = document.getElementById('verifyBtn');
+  const resendBtn = document.getElementById('resendBtn');
+
+  otpInputs.forEach((input, index) => {
+    input.addEventListener('input', function(e) {
+      const value = e.target.value;
+
+      // Only allow numbers
+      if (!/^\d$/.test(value)) {
+        e.target.value = '';
+        return;
+      }
+
+      // Add filled class
+      e.target.classList.add('filled');
+
+      // Move to next input
+      if (value && index < otpInputs.length - 1) {
+        otpInputs[index + 1].focus();
+      }
+
+      // Check if all inputs are filled
+      checkOTPComplete();
+    });
+
+    input.addEventListener('keydown', function(e) {
+      // Handle backspace
+      if (e.key === 'Backspace') {
+        if (!e.target.value && index > 0) {
+          otpInputs[index - 1].focus();
+          otpInputs[index - 1].value = '';
+          otpInputs[index - 1].classList.remove('filled');
+        } else {
+          e.target.value = '';
+          e.target.classList.remove('filled');
+        }
+        checkOTPComplete();
+      }
+    });
+
+    // Handle paste
+    input.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const pastedData = e.clipboardData.getData('text');
+      const digits = pastedData.replace(/\D/g, '').slice(0, 6);
+
+      digits.split('').forEach((digit, i) => {
+        if (otpInputs[i]) {
+          otpInputs[i].value = digit;
+          otpInputs[i].classList.add('filled');
+        }
+      });
+
+      checkOTPComplete();
+    });
+  });
+
+  function checkOTPComplete() {
+    const allFilled = Array.from(otpInputs).every(input => input.value);
+    verifyBtn.disabled = !allFilled;
+  }
+
+  // Countdown timer
+  let timeLeft = 300; // 5 minutes
+  const countdownElement = document.getElementById('countdown');
+
+  function updateCountdown() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    if (timeLeft <= 0) {
+      // Enable resend button when timer expires
+      resendBtn.disabled = false;
+      countdownElement.textContent = 'Expired';
+      clearInterval(timer);
+    }
+
+    timeLeft--;
+  }
+
+  const timer = setInterval(updateCountdown, 1000);
+  updateCountdown(); // Initial call
+
+
+  // Focus first input on load
+  otpInputs[0].focus();
+</script>
+</body>
+</html>

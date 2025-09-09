@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Reset - Verification Code</title>
+  <style>
+    /* Email-safe CSS */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      line-height: 1.6;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .title {
+      color: #1e293b;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: #475569;
+      font-size: 16px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .security-notice {
+      background-color: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .security-notice-title {
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .security-notice-text {
+      color: #b45309;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .otp-section {
+      background-color: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: center;
+    }
+
+    .otp-label {
+      color: #374151;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .otp-code {
+      font-size: 36px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      color: #1e293b;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 8px;
+      margin: 20px 0;
+      display: block;
+      text-align: center;
+    }
+
+    .otp-fallback {
+      font-size: 36px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      color: #667eea;
+      letter-spacing: 8px;
+      margin: 20px 0;
+      display: block;
+      text-align: center;
+    }
+
+    .otp-instructions {
+      color: #6b7280;
+      font-size: 14px;
+      margin-top: 15px;
+    }
+
+    .timer-info {
+      background-color: #dbeafe;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 25px 0;
+      text-align: center;
+    }
+
+    .timer-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .timer-text {
+      color: #1e40af;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .timer-subtitle {
+      color: #3b82f6;
+      font-size: 14px;
+    }
+
+    .action-section {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .action-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .request-info {
+      background-color: #f1f5f9;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .request-title {
+      color: #1e293b;
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .info-value {
+      color: #6b7280;
+    }
+
+    .security-tips {
+      background-color: #f0f9ff;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .security-tips-title {
+      color: #0369a1;
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .security-tips-list {
+      color: #0284c7;
+      font-size: 14px;
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .security-tips-list li {
+      margin-bottom: 8px;
+    }
+
+    .not-you-section {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 30px 0;
+      text-align: center;
+    }
+
+    .not-you-title {
+      color: #dc2626;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .not-you-text {
+      color: #991b1b;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .report-button {
+      display: inline-block;
+      background-color: #dc2626;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .footer {
+      background-color: #1e293b;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .footer-links {
+      margin: 20px 0;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-text {
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      .email-container {
+        margin: 0;
+        width: 100%;
+      }
+
+      .content {
+        padding: 30px 20px;
+      }
+
+      .header {
+        padding: 30px 20px;
+      }
+
+      .otp-code, .otp-fallback {
+        font-size: 28px;
+        letter-spacing: 4px;
+      }
+
+      .info-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">InsightEd</div>
+    <p class="header-subtitle">Password Reset Request</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h1 class="title">Password Reset Verification</h1>
+    <p class="subtitle">
+      We received a request to reset your password. Use the verification code below to continue.
+    </p>
+
+    <!-- Security Notice -->
+    <div class="security-notice">
+      <div class="security-notice-title">🔒 Security Notice</div>
+      <p class="security-notice-text">
+        This verification code was requested for your account. If you didn't request this, please ignore this email or contact support immediately.
+      </p>
+    </div>
+
+    <!-- OTP Section -->
+    <div class="otp-section">
+      <div class="otp-label">Your 6-Digit Verification Code:</div>
+
+      <!-- Gradient text for modern email clients -->
+      <div class="otp-code">[[${otpCode}]]</div>
+
+      <!-- Fallback for older email clients -->
+      <div class="otp-fallback" style="display: none;">[[${otpCode}]]</div>
+
+      <div class="otp-instructions">
+        Enter this code in the verification form to proceed with your password reset.
+      </div>
+    </div>
+
+    <!-- Timer Information -->
+    <div class="timer-info">
+      <div class="timer-icon">⏱️</div>
+      <div class="timer-text">Code expires in 5 minutes</div>
+      <div class="timer-subtitle">Please complete your password reset within this time</div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="action-section">
+      <a href="{{RESET_URL}}" class="action-button">Continue Password Reset</a>
+    </div>
+
+
+    <!-- Security Tips -->
+    <div class="security-tips">
+      <div class="security-tips-title">🛡️ Security Tips</div>
+      <ul class="security-tips-list">
+        <li>Never share your verification code with anyone</li>
+        <li>InsightEd will never ask for your password via email</li>
+        <li>Complete the reset process within 5 minutes</li>
+        <li>Use a strong, unique password for your new password</li>
+        <li>Enable two-factor authentication if available</li>
+      </ul>
+    </div>
+
+    <!-- Not You Section -->
+    <div class="not-you-section">
+      <div class="not-you-title">⚠️ This Wasn't You?</div>
+      <div class="not-you-text">
+        If you didn't request a password reset, your account may be at risk.
+        Please secure your account immediately and contact our support team.
+      </div>
+      <a href="{{REPORT_URL}}" class="report-button">Report Suspicious Activity</a>
+    </div>
+
+    <p style="color: #6b7280; text-align: center; margin-top: 40px; font-size: 14px;">
+      <strong>Need Help?</strong><br>
+      If you're having trouble with the password reset process, our support team is here to help.
+      Contact us at <a href="mailto:support@insighted.com" style="color: var(--primary-blue);">support@insighted.com</a>
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="logo">InsightEd</div>
+    <div class="footer-links">
+      <a href="http://localhost:8080">Visit Website</a>
+      <a href="{{HELP_URL}}">Help Center</a>
+      <a href="{{CONTACT_URL}}">Contact Support</a>
+      <a href="{{PRIVACY_URL}}">Privacy Policy</a>
+    </div>
+    <div class="footer-text">
+      © 2025 InsightEd Platform. All rights reserved.<br>
+      This email was sent to {{USER_EMAIL}}<br>
+    </div>
+  </div>
+</div>
+</body>
+</html>
