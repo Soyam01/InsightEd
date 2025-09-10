@@ -135,10 +135,33 @@ public class TeacherPageController {
     }
 
     @GetMapping("/notification")
-    public String notificationsPage(Model model){
+    public String notificationsPage(Model model, HttpSession session) {
         model.addAttribute("activepage", "Notification");
-        return "teacher-notification";
+
+        // 1. Get teacher from session
+        String email = (String) session.getAttribute("email");
+        User teacher = userRepository.findByEmail(email);
+
+        // 2. Fetch all submissions for this teacher
+        List<Assignment> submittedAssignments = assignmentRepo.findByTeacherOrderBySubmittedAtDesc(teacher);
+
+        // Split assignments: pending vs graded
+        List<Assignment> newSubmissions = submittedAssignments.stream()
+                .filter(a -> a.getStatus() == AssignmentStatus.SUBMITTED)
+                .toList();
+
+        List<Assignment> gradedAssignments = submittedAssignments.stream()
+                .filter(a -> a.getStatus() == AssignmentStatus.REVIEWED)
+                .toList();
+
+        // 3. Add to model
+        model.addAttribute("newSubmissions", newSubmissions);
+        model.addAttribute("gradedAssignments", gradedAssignments);
+
+        return "teacher-notification";  // your HTML page
     }
+
+
 
     private User getCurrentUser(Authentication auth) {
         String email = auth.getName();

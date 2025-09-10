@@ -2,8 +2,10 @@ package com.app.Insighted.controller;
 
 import com.app.Insighted.model.Assignment;
 import com.app.Insighted.model.AssignmentStatus;
+import com.app.Insighted.model.TeacherAssignment;
 import com.app.Insighted.model.User;
 import com.app.Insighted.repository.AssignmentRepo;
+import com.app.Insighted.repository.TeacherAssignmentRepo;
 import com.app.Insighted.repository.UserRepo;
 import com.app.Insighted.services.AssignmentService;
 import jakarta.servlet.http.HttpSession;
@@ -26,8 +28,12 @@ public class StudentPageController {
 
     @Autowired
     private AssignmentService assignmentService;
+
     @Autowired
     private AssignmentRepo assignmentRepo;
+
+    @Autowired
+    private TeacherAssignmentRepo teacherAssignmentRepo;
 
     @GetMapping("/feedback")
     public String feedbackPage(Model model, Authentication auth) {
@@ -81,10 +87,29 @@ public class StudentPageController {
     }
 
     @GetMapping("/notification")
-    public String notificationPage(Model model){
+    public String notificationPage(Model model, HttpSession session) {
         model.addAttribute("activepage", "Notification");
+
+        // Get logged-in student
+        String email = (String) session.getAttribute("email");
+        User student = userRepo.findByEmail(email);
+
+        // Fetch notifications:
+        // 1. New teacher assignments (all, or you can filter by course/student’s enrolled classes if you track enrollment)
+        List<TeacherAssignment> newAssignments = teacherAssignmentRepo.findAll();
+
+        // 2. Student’s assignments that are graded
+        List<Assignment> gradedAssignments = assignmentRepo.findByStudentOrderBySubmittedAtDesc(student)
+                .stream()
+                .filter(a -> a.getGrade() != null)
+                .toList();
+
+        model.addAttribute("newAssignments", newAssignments);
+        model.addAttribute("gradedAssignments", gradedAssignments);
+
         return "student-notifications";
     }
+
 
     private User getCurrentUser(Authentication auth) {
         String email = auth.getName();

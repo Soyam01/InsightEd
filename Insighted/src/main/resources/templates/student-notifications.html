@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
   <title>Notifications - InsightEd Platform</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -32,112 +31,36 @@
 
     <!-- Notifications List -->
     <div style="display: grid; gap: 1rem;">
-      <!-- Unread Feedback Notification -->
-      <div class="card" style="border-left: 4px solid var(--primary-blue);">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="width: 8px; height: 8px; background: var(--primary-blue); border-radius: 50%; display: inline-block;"></span>
-              <span style="font-weight: 600; color: var(--gray-800);">💬 New Feedback Available</span>
-            </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">2 hours ago</span>
-          </div>
-          <div style="margin-left: 10px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">Prof. Sarah Johnson has provided feedback on your "Essay on Machine Learning" assignment.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">Grade: 92% - Excellent work! Click to view detailed feedback.</p>
-            <div style="margin-top: 1rem;">
-              <button class="btn btn-primary" style="font-size: 0.875rem; padding: 0.375rem 0.75rem;">View Feedback</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Grade Posted Notification -->
-      <div class="card" style="border-left: 4px solid var(--success);">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block;"></span>
-              <span style="font-weight: 600; color: var(--gray-800);">📊 Grade Posted</span>
-            </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">1 day ago</span>
-          </div>
-          <div style="margin-left: 10px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">Your grade for "Algorithm Analysis" has been posted by Dr. Michael Chen.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">Grade: 85% - Good work on time complexity analysis.</p>
-            <div style="margin-top: 1rem;">
-              <button class="btn btn-secondary" style="font-size: 0.875rem; padding: 0.375rem 0.75rem;">View Grade</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div style="display: grid; gap: 1rem;">
 
-      <!-- Assignment Due Soon -->
-      <div class="card" style="border-left: 4px solid var(--warning);">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="width: 8px; height: 8px; background: var(--warning); border-radius: 50%; display: inline-block;"></span>
-              <span style="font-weight: 600; color: var(--gray-800);">⏰ Assignment Due Soon</span>
+        <!-- New Assignments -->
+        <div th:each="ta : ${newAssignments}" class="card" style="border-left: 4px solid var(--warning);">
+          <div style="padding: 1.5rem;">
+            <div class="flex justify-between items-start mb-2">
+              <span style="font-weight: 600; color: var(--gray-800);">📢 New Assignment Added</span>
             </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">2 days ago</span>
-          </div>
-          <div style="margin-left: 10px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">Database Design project for CS 202 is due in 3 days.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">Due: September 2, 2025 at 11:59 PM</p>
-            <div style="margin-top: 1rem;">
-              <button class="btn btn-warning" style="font-size: 0.875rem; padding: 0.375rem 0.75rem;">View Assignment</button>
+            <div>
+              <p th:text="'New assignment: ' + ${ta.assignmentTitle} + ' for ' + ${ta.course}"></p>
+              <p th:text="'Due: ' + ${#temporals.format(ta.dueDate, 'yyyy-MM-dd')}"></p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Course Announcement -->
-      <div class="card">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="font-weight: 600; color: var(--gray-800);">📢 Course Announcement</span>
+        <!-- Graded Assignments -->
+        <div th:each="ga : ${gradedAssignments}" class="card" style="border-left: 4px solid var(--success);">
+          <div style="padding: 1.5rem;">
+            <div class="flex justify-between items-start mb-2">
+              <span style="font-weight: 600; color: var(--gray-800);">✅ Assignment Graded</span>
             </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">3 days ago</span>
-          </div>
-          <div style="margin-left: 0px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">CS 301: Office hours moved to Fridays 2:00-4:00 PM starting next week.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">From: Dr. Michael Chen - CS 301 Advanced Algorithms</p>
+            <div>
+              <p th:text="'Your assignment ' + ${ga.title} + ' has been graded.'"></p>
+              <p th:text="'Grade: ' + ${ga.grade} + '%'"></p>
+              <p th:text="'Reviewed At: ' + ${#temporals.format(ga.reviewedAt, 'yyyy-MM-dd')}"></p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- System Notification -->
-      <div class="card">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="font-weight: 600; color: var(--gray-800);">🔧 System Update</span>
-            </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">1 week ago</span>
-          </div>
-          <div style="margin-left: 0px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">InsightEd platform will undergo maintenance on September 5, 2025 from 2:00-4:00 AM.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">Limited functionality may be available during this time.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Assignment Submitted Confirmation -->
-      <div class="card">
-        <div style="padding: 1.5rem;">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex items-center gap-2">
-              <span style="font-weight: 600; color: var(--gray-800);">✅ Assignment Submitted</span>
-            </div>
-            <span style="font-size: 0.875rem; color: var(--gray-500);">1 week ago</span>
-          </div>
-          <div style="margin-left: 0px;">
-            <p style="margin: 0 0 0.5rem; color: var(--gray-700);">Your "Data Structures Project" has been successfully submitted to CS 201.</p>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-500);">Submitted on: August 23, 2025 at 10:45 PM</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
